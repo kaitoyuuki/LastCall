@@ -17,8 +17,6 @@ public class LastCallCommands implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		String LastSong = plugin.getConfig().getString("lcDefault");
-		int LastID = 0;
 		if (cmd.getName().equalsIgnoreCase("lc")) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
@@ -65,6 +63,8 @@ public class LastCallCommands implements CommandExecutor {
 			}
 		}
 		if (cmd.getName().equalsIgnoreCase("lastcall")) {
+			String LastSong = plugin.getConfig().getString("lcDefault");
+			int LastID = 0;
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				if (player.hasPermission("lastcall.lastcall")) {
@@ -445,7 +445,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2257);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// 13 2256
@@ -453,7 +453,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2256);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// blocks 2258
@@ -461,7 +461,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2258);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// chirp 2259
@@ -469,7 +469,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2259);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// far 2260
@@ -477,7 +477,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2260);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// mall 2261
@@ -485,7 +485,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2261);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// mellohi 2262
@@ -493,7 +493,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2262);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}							
 						// stal 2263
@@ -501,7 +501,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2263);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// strad 2264
@@ -509,7 +509,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2264);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// ward 2265
@@ -517,7 +517,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2265);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// 11 2266
@@ -525,7 +525,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2267);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						// wait 2267
@@ -533,7 +533,7 @@ public class LastCallCommands implements CommandExecutor {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2268);
-							sender.sendMessage("Now playing " + args[1] + " for " + target);
+							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 							return true;
 						}
 						else {
@@ -665,7 +665,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2257);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								// 13 2256
@@ -673,7 +673,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2256);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								// blocks 2258
@@ -681,7 +681,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2258);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								// chirp 2259
@@ -689,7 +689,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2259);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								// far 2260
@@ -697,7 +697,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2260);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing" + args[1] + " for " + args[0]);
 									return true;
 								}
 								// mall 2261
@@ -705,7 +705,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2261);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								// mellohi 2262
@@ -713,7 +713,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2262);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}							
 								// stal 2263
@@ -721,7 +721,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2263);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								// strad 2264
@@ -729,7 +729,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2264);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								// ward 2265
@@ -737,7 +737,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2265);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								// 11 2266
@@ -745,7 +745,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2267);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								// wait 2267
@@ -753,7 +753,7 @@ public class LastCallCommands implements CommandExecutor {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2268);
-									sender.sendMessage("Now playing" + args[1] + " for " + target);
+									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
 									return true;
 								}
 								else {

@@ -1,6 +1,6 @@
 name: LastCall
 main: com.github.kaitoyuuki.LastCall.LCMain
-version: 0.1
+version: 1.0
 commands:
     play:
         description: plays a music disc.

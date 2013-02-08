@@ -6,6 +6,7 @@ public final class LCMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		this.saveDefaultConfig();
 		getConfig();
 		getCommand("play").setExecutor(new LastCallCommands(this));
 		getCommand("lastcall").setExecutor(new LastCallCommands(this));

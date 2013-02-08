@@ -1,0 +1,25 @@
+name: LastCall
+main: com.github.kaitoyuuki.LastCall.LCMain
+version: 0.1
+commands:
+    play:
+        description: plays a music disc.
+        permission: <plugin-name>.<command>
+        permission-message: you don't have <permission>
+    lastcall:
+        description: plays stal.
+        usage: /<command>
+        permission: <plugin-name>.<command>
+        
+Permissions:
+    lastcall.*:
+        description: Gives access to all LastCall commands
+        children:
+            lastcall.lastcall: true
+            lastcall.play: true
+            lastcall.play.others: true
+    lastcall.play.*:
+        description: Gives access to play music discs for anyone
+        children:
+            lastcall.play: true
+            lastcall.play.others: true

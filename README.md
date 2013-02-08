@@ -1,4 +1,4 @@
 LastCall
 ========
 
-Collection of bukkit plugins related to music discs
+Collection of bukkit commands related to music discs.

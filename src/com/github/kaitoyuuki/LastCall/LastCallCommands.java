@@ -7,7 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 public class LastCallCommands implements CommandExecutor {
 
 	private LCMain plugin;
@@ -18,66 +17,153 @@ public class LastCallCommands implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		String LastSong = plugin.getConfig().getString("lcDefault");
+		int LastID = 0;
+		if (cmd.getName().equalsIgnoreCase("lc")) {
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				if (player.hasPermission("lastcall.lc")) {
+					if (args.length > 1) {
+						sender.sendMessage("Too many arguments!");
+						return false;
+					}
+					if (args.length == 1) {
+						if (args[0].equalsIgnoreCase("reload")) {
+							plugin.getConfig();
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					sender.sendMessage("You do not have permission!");
+					return false;
+				}
+			}
+			else {
+				if (args.length > 1) {
+					sender.sendMessage("Too many arguments!");
+					return false;
+				}
+				if (args.length == 1) {
+					if (args[0].equalsIgnoreCase("reload")) {
+						plugin.getConfig();
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					return false;
+				}
+			}
+		}
 		if (cmd.getName().equalsIgnoreCase("lastcall")) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				if (player.hasPermission("lastcall.lastcall")) {
-					if (args.length != 0) {
+					if (args.length > 1) {
 						return false;
 					}
-					else {
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, 2263);
-						}
-						Bukkit.getServer().broadcastMessage("§4Server is shutting down [§625s§4]");
-						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-							@Override
-							public void run() {
-								Bukkit.getServer().broadcastMessage("§4Server is shutting down [§610s§4]");	
-								Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-									@Override
-									public void run() {
-										Bukkit.getServer().broadcastMessage("§4Server is shutting down [§65s§4]");	
-										Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-											@Override
-											public void run() {
-												Bukkit.getServer().broadcastMessage("§4Server is shutting down [§64s§4]");
-												Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-													@Override
-													public void run() {
-														Bukkit.getServer().broadcastMessage("§4Server is shutting down [§63s§4]");
-														Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-															@Override
-															public void run() {
-																Bukkit.getServer().broadcastMessage("§4Server is shutting down [§62s§4]");	
-																Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-																	@Override
-																	public void run() {
-																		Bukkit.getServer().broadcastMessage("§4Server is shutting down [§61s§4]");
-																		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-																			@Override
-																			public void run() {
-																				for (Player player : Bukkit.getOnlinePlayers()) {
-																					player.kickPlayer("Server is shutting down");
-																				}
-																				Bukkit.shutdown();		
-																			}
-																		}, 20L);
-																	}
-																}, 20L);
-															}
-														}, 20L);
-													}
-												}, 20L);
-											}
-										}, 20L);	
-									}
-								}, 100L);
-							}
-						}, 300L);
+					if (args.length < 0) {
+						return false;
 					}
+					if (args.length == 1) {
+						LastSong = args[0];
+					}
+					if (LastSong == "13") {
+						LastID =  2256;
+					}
+					if (LastSong.equalsIgnoreCase("cat")) {
+						LastID =  2257;
+					}
+					if (LastSong.equalsIgnoreCase("blocks")) {
+						LastID =  2258;
+					}
+					if (LastSong.equalsIgnoreCase("chirp")) {
+						LastID =  2259;
+					}
+					if (LastSong.equalsIgnoreCase("far")) {
+						LastID =  2260;
+					}
+					if (LastSong.equalsIgnoreCase("mall")) {
+						LastID =  2261;
+					}
+					if (LastSong.equalsIgnoreCase("mellohi")) {
+						LastID =  2262;
+					}
+					if (LastSong.equalsIgnoreCase("stal")) {
+						LastID =  2263;
+					}
+					if (LastSong.equalsIgnoreCase("strad")) {
+						LastID =  2264;
+					}
+					if (LastSong.equalsIgnoreCase("ward")) {
+						LastID =  2265;
+					}
+					if (LastSong == "11") {
+						LastID =  2266;
+					}
+					if (LastSong.equalsIgnoreCase("wait")) {
+						LastID =  2267;
+					}
+					Effect effect = Effect.RECORD_PLAY;
+					for(Player target : Bukkit.getServer().getOnlinePlayers()) {
+						Location loc = target.getLocation();
+						target.playEffect(loc, effect, LastID);
+					}
+					Bukkit.getServer().broadcastMessage("§4Server is shutting down [§625s§4]");
+					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+						@Override
+						public void run() {
+							Bukkit.getServer().broadcastMessage("§4Server is shutting down [§610s§4]");	
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+								@Override
+								public void run() {
+									Bukkit.getServer().broadcastMessage("§4Server is shutting down [§65s§4]");	
+									Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+										@Override
+										public void run() {
+											Bukkit.getServer().broadcastMessage("§4Server is shutting down [§64s§4]");
+											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+												@Override
+												public void run() {
+													Bukkit.getServer().broadcastMessage("§4Server is shutting down [§63s§4]");
+													Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+														@Override
+														public void run() {
+															Bukkit.getServer().broadcastMessage("§4Server is shutting down [§62s§4]");	
+															Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+																@Override
+																public void run() {
+																	Bukkit.getServer().broadcastMessage("§4Server is shutting down [§61s§4]");
+																	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+																		@Override
+																		public void run() {
+																			for (Player player : Bukkit.getOnlinePlayers()) {
+																				player.kickPlayer("Server is shutting down");
+																			}
+																			Bukkit.shutdown();		
+																		}
+																	}, 20L);
+																}
+															}, 20L);
+														}
+													}, 20L);
+												}
+											}, 20L);
+										}
+									}, 20L);	
+								}
+							}, 100L);
+						}
+					}, 300L);
 				}
 				else {
 					player.sendMessage("You do not have permission to do that!");
@@ -85,10 +171,51 @@ public class LastCallCommands implements CommandExecutor {
 				}
 			}
 			else {
-				if (args.length != 0) {
+				if (args.length > 1) {
 					return false;
 				}
-				else {
+				if (args.length < 0) {
+					return false;
+				}
+				if (args.length == 1) {
+					LastSong = args[0];
+				}
+				if (LastSong == "13") {
+					LastID =  2256;
+				}
+				if (LastSong.equalsIgnoreCase("cat")) {
+					LastID =  2257;
+				}
+				if (LastSong.equalsIgnoreCase("blocks")) {
+					LastID =  2258;
+				}
+				if (LastSong.equalsIgnoreCase("chirp")) {
+					LastID =  2259;
+				}
+				if (LastSong.equalsIgnoreCase("far")) {
+					LastID =  2260;
+				}
+				if (LastSong.equalsIgnoreCase("mall")) {
+					LastID =  2261;
+				}
+				if (LastSong.equalsIgnoreCase("mellohi")) {
+					LastID =  2262;
+				}
+				if (LastSong.equalsIgnoreCase("stal")) {
+					LastID =  2263;
+				}
+				if (LastSong.equalsIgnoreCase("strad")) {
+					LastID =  2264;
+				}
+				if (LastSong.equalsIgnoreCase("ward")) {
+					LastID =  2265;
+				}
+				if (LastSong == "11") {
+					LastID =  2266;
+				}
+				if (LastSong.equalsIgnoreCase("wait")) {
+					LastID =  2267;
+				}
 					Effect effect = Effect.RECORD_PLAY;
 					for(Player target : Bukkit.getServer().getOnlinePlayers()) {
 						Location loc = target.getLocation();
@@ -140,7 +267,6 @@ public class LastCallCommands implements CommandExecutor {
 							}, 100L);
 						}
 					}, 300L);
-				}
 			}
 		}
 		if (cmd.getName().equalsIgnoreCase("play")) {
@@ -189,7 +315,7 @@ public class LastCallCommands implements CommandExecutor {
 							target.playEffect(loc, effect, discID);	
 						}
 						sender.sendMessage("Now playing blocks for all users");
-						
+
 						return true;
 					}
 					// chirp 2259
@@ -228,15 +354,15 @@ public class LastCallCommands implements CommandExecutor {
 
 						return true;
 					}
-					// melohi 2262
-					if (args[0].equalsIgnoreCase("melohi")) {
+					// mellohi 2262
+					if (args[0].equalsIgnoreCase("mellohi")) {
 						discID = 2262;
 						Effect effect = Effect.RECORD_PLAY;
 						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
 							Location loc = target.getLocation();
 							target.playEffect(loc, effect, discID);	
 						}
-						sender.sendMessage("Now playing melohi for all users");
+						sender.sendMessage("Now playing mellohi for all users");
 
 						return true;
 					}							
@@ -362,8 +488,8 @@ public class LastCallCommands implements CommandExecutor {
 							sender.sendMessage("Now playing " + args[1] + " for " + target);
 							return true;
 						}
-						// melohi 2262
-						if (args[1].equalsIgnoreCase("melohi")) {
+						// mellohi 2262
+						if (args[1].equalsIgnoreCase("mellohi")) {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2262);
@@ -471,8 +597,8 @@ public class LastCallCommands implements CommandExecutor {
 							sender.sendMessage("Now playing " + args[0]);
 							return true;
 						}
-						// melohi 2262
-						if (args[0].equalsIgnoreCase("melohi")) {
+						// mellohi 2262
+						if (args[0].equalsIgnoreCase("mellohi")) {
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, 2262);
@@ -582,8 +708,8 @@ public class LastCallCommands implements CommandExecutor {
 									sender.sendMessage("Now playing" + args[1] + " for " + target);
 									return true;
 								}
-								// melohi 2262
-								if (args[1].equalsIgnoreCase("melohi")) {
+								// mellohi 2262
+								if (args[1].equalsIgnoreCase("mellohi")) {
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, 2262);

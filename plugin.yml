@@ -2,19 +2,25 @@ name: LastCall
 main: com.github.kaitoyuuki.LastCall.LCMain
 version: 1.0
 commands:
+    lc:
+        description: base command for lastcall.
+        permission: <plugin-name>.<command>
+        permission-message: you don't have <permission>
+        usage: /<command> {reload}
     play:
         description: plays a music disc.
         permission: <plugin-name>.<command>
         permission-message: you don't have <permission>
     lastcall:
-        description: plays stal.
-        usage: /<command>
+        description: plays the last call song and notifies users how long before shutdown.
+        usage: /<command> [disc]
         permission: <plugin-name>.<command>
         
 Permissions:
     lastcall.*:
         description: Gives access to all LastCall commands
         children:
+            lastcall.lc: true
             lastcall.lastcall: true
             lastcall.play: true
             lastcall.play.others: true
@@ -23,3 +29,15 @@ Permissions:
         children:
             lastcall.play: true
             lastcall.play.others: true
+    lastcall.lc:
+        description: base command for LastCall.
+        default: op
+    lastcall.lastcall:
+        description: allows you to start the shutdown timer
+        default: op
+    lastcall.play:
+        description: lets you play a music disc for yourself
+        default: true
+    lastcall.play.others:
+        description: allows you to set the currently playing disc for others
+        default: op

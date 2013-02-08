@@ -1,4 +1,4 @@
 
 # default music disc to be played when using /lastcall
 # acceptable values are the names of the discs
-lc-default: stal
+lcDefault: stal

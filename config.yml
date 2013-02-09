@@ -2,3 +2,4 @@
 # default music disc to be played when using /lastcall
 # acceptable values are the names of the discs
 lcDefault: stal
+counterMsg: §4Server is shutting down [§6  s§4]

@@ -10,7 +10,7 @@ public class LastDiscs {
 		return discName;
 	}
 	
-	public int getDiscID(final String LastSong) {
+	int getDiscID(String LastSong) {
 		int discID = 0;
 		if (LastSong == "13") {
 			discID =  2256;

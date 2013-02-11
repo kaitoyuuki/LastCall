@@ -7,6 +7,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+
+
 public class LastCallCommands implements CommandExecutor {
 
 	private LCMain plugin;
@@ -14,6 +17,7 @@ public class LastCallCommands implements CommandExecutor {
 	public LastCallCommands(LCMain plugin) {
 		this.plugin = plugin;
 	}
+	LastDiscs disc = new LastDiscs();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -72,48 +76,10 @@ public class LastCallCommands implements CommandExecutor {
 					if (args.length > 1) {
 						return false;
 					}
-					if (args.length < 0) {
-						return false;
-					}
 					if (args.length == 1) {
 						LastSong = args[0];
 					}
-					if (LastSong == "13") {
-						LastID =  2256;
-					}
-					if (LastSong.equalsIgnoreCase("cat")) {
-						LastID =  2257;
-					}
-					if (LastSong.equalsIgnoreCase("blocks")) {
-						LastID =  2258;
-					}
-					if (LastSong.equalsIgnoreCase("chirp")) {
-						LastID =  2259;
-					}
-					if (LastSong.equalsIgnoreCase("far")) {
-						LastID =  2260;
-					}
-					if (LastSong.equalsIgnoreCase("mall")) {
-						LastID =  2261;
-					}
-					if (LastSong.equalsIgnoreCase("mellohi")) {
-						LastID =  2262;
-					}
-					if (LastSong.equalsIgnoreCase("stal")) {
-						LastID =  2263;
-					}
-					if (LastSong.equalsIgnoreCase("strad")) {
-						LastID =  2264;
-					}
-					if (LastSong.equalsIgnoreCase("ward")) {
-						LastID =  2265;
-					}
-					if (LastSong == "11") {
-						LastID =  2266;
-					}
-					if (LastSong.equalsIgnoreCase("wait")) {
-						LastID =  2267;
-					}
+					LastID = disc.getDiscID(LastSong);
 					Effect effect = Effect.RECORD_PLAY;
 					for(Player target : Bukkit.getServer().getOnlinePlayers()) {
 						Location loc = target.getLocation();
@@ -127,44 +93,24 @@ public class LastCallCommands implements CommandExecutor {
 							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 								@Override
 								public void run() {
-									Bukkit.getServer().broadcastMessage("§4Server is shutting down [§65s§4]");	
-									Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-										@Override
-										public void run() {
-											Bukkit.getServer().broadcastMessage("§4Server is shutting down [§64s§4]");
-											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-												@Override
-												public void run() {
-													Bukkit.getServer().broadcastMessage("§4Server is shutting down [§63s§4]");
-													Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-														@Override
-														public void run() {
-															Bukkit.getServer().broadcastMessage("§4Server is shutting down [§62s§4]");	
-															Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-																@Override
-																public void run() {
-																	Bukkit.getServer().broadcastMessage("§4Server is shutting down [§61s§4]");
-																	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-																		@Override
-																		public void run() {
-																			for (Player player : Bukkit.getOnlinePlayers()) {
-																				player.kickPlayer("Server is shutting down");
-																			}
-																			Bukkit.shutdown();		
-																		}
-																	}, 20L);
-																}
-															}, 20L);
-														}
-													}, 20L);
-												}
-											}, 20L);
-										}
-									}, 20L);	
+									int time = 5;
+									do {
+										Bukkit.getServer().broadcastMessage("§4Server is shutting down [§6" + time + "s§4]");	
+										Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+											public void run() {
+											}
+										}, 20L);
+										time--;
+									} while (time > 0);
+									for (Player player : Bukkit.getOnlinePlayers()) {
+										player.kickPlayer("Server is shutting down");
+									}
+									Bukkit.shutdown();	
 								}
 							}, 100L);
 						}
 					}, 300L);
+					return true;
 				}
 				else {
 					player.sendMessage("You do not have permission to do that!");
@@ -175,99 +121,41 @@ public class LastCallCommands implements CommandExecutor {
 				if (args.length > 1) {
 					return false;
 				}
-				if (args.length < 0) {
-					return false;
-				}
 				if (args.length == 1) {
 					LastSong = args[0];
 				}
-				if (LastSong == "13") {
-					LastID =  2256;
+				LastID = disc.getDiscID(LastSong);
+				Effect effect = Effect.RECORD_PLAY;
+				for(Player target : Bukkit.getServer().getOnlinePlayers()) {
+					Location loc = target.getLocation();
+					target.playEffect(loc, effect, 2263);
 				}
-				if (LastSong.equalsIgnoreCase("cat")) {
-					LastID =  2257;
-				}
-				if (LastSong.equalsIgnoreCase("blocks")) {
-					LastID =  2258;
-				}
-				if (LastSong.equalsIgnoreCase("chirp")) {
-					LastID =  2259;
-				}
-				if (LastSong.equalsIgnoreCase("far")) {
-					LastID =  2260;
-				}
-				if (LastSong.equalsIgnoreCase("mall")) {
-					LastID =  2261;
-				}
-				if (LastSong.equalsIgnoreCase("mellohi")) {
-					LastID =  2262;
-				}
-				if (LastSong.equalsIgnoreCase("stal")) {
-					LastID =  2263;
-				}
-				if (LastSong.equalsIgnoreCase("strad")) {
-					LastID =  2264;
-				}
-				if (LastSong.equalsIgnoreCase("ward")) {
-					LastID =  2265;
-				}
-				if (LastSong == "11") {
-					LastID =  2266;
-				}
-				if (LastSong.equalsIgnoreCase("wait")) {
-					LastID =  2267;
-				}
-					Effect effect = Effect.RECORD_PLAY;
-					for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-						Location loc = target.getLocation();
-						target.playEffect(loc, effect, 2263);
-					}
-					Bukkit.getServer().broadcastMessage("§4Server is shutting down [§625s§4]");
-					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-						@Override
-						public void run() {
-							Bukkit.getServer().broadcastMessage("§4Server is shutting down [§610s§4]");	
-							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-								@Override
-								public void run() {
-									Bukkit.getServer().broadcastMessage("§4Server is shutting down [§65s§4]");	
+				Bukkit.getServer().broadcastMessage("§4Server is shutting down [§625s§4]");
+				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+					@Override
+					public void run() {
+						Bukkit.getServer().broadcastMessage("§4Server is shutting down [§610s§4]");	
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+							@Override
+							public void run() {
+								int time = 5;
+								do {
+									Bukkit.getServer().broadcastMessage("§4Server is shutting down [§6" + time + "s§4]");	
 									Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-										@Override
 										public void run() {
-											Bukkit.getServer().broadcastMessage("§4Server is shutting down [§64s§4]");
-											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-												@Override
-												public void run() {
-													Bukkit.getServer().broadcastMessage("§4Server is shutting down [§63s§4]");
-													Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-														@Override
-														public void run() {
-															Bukkit.getServer().broadcastMessage("§4Server is shutting down [§62s§4]");	
-															Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-																@Override
-																public void run() {
-																	Bukkit.getServer().broadcastMessage("§4Server is shutting down [§61s§4]");
-																	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-																		@Override
-																		public void run() {
-																			for (Player player : Bukkit.getOnlinePlayers()) {
-																				player.kickPlayer("Server is shutting down");
-																			}
-																			Bukkit.shutdown();		
-																		}
-																	}, 20L);
-																}
-															}, 20L);
-														}
-													}, 20L);
-												}
-											}, 20L);
 										}
-									}, 20L);	
+									}, 20L);
+									time--;
+								} while (time > 0);
+								for (Player player : Bukkit.getOnlinePlayers()) {
+									player.kickPlayer("Server is shutting down");
 								}
-							}, 100L);
-						}
-					}, 300L);
+								Bukkit.shutdown();	
+							}
+						}, 100L);
+					}
+				}, 300L);
+				return true;
 			}
 		}
 

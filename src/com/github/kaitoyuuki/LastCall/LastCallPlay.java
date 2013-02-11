@@ -37,15 +37,16 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 				}
 				if (args.length == 1) {
 					int discID = 0;
-					String PlaySong = args[0];
-					discID = disc.getDiscID(PlaySong);
+					discID = disc.getDiscID(args[0]);
+					Material material = Material.getMaterial(discID);
+					String discName = disc.getDiscName(material);
 					if (discID != 0) { 
 						Effect effect = Effect.RECORD_PLAY;
 						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
 							Location loc = target.getLocation();
 							target.playEffect(loc, effect, discID);	
 						}
-						sender.sendMessage("Now playing " + PlaySong + " for all users");
+						sender.sendMessage("Now playing " + discName + " for all users");
 
 						return true;
 					}
@@ -62,8 +63,9 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 					}
 					else {
 						int discID = 0;
-						String PlaySong = args[1];
-						discID = disc.getDiscID(PlaySong);
+						discID = disc.getDiscID(args[1]);
+						Material material = Material.getMaterial(discID);
+						String discName = disc.getDiscName(material);
 						if (discID == 0) {
 							sender.sendMessage("Not a valid disc!");
 							return false;
@@ -72,7 +74,7 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, discID);
-							sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
+							sender.sendMessage("Now playing " + discName + " for " + args[0]);
 							return true;
 						}
 					}
@@ -86,9 +88,10 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 						if ((discID > 2255) && (discID < 2268)) {
 							Location loc = player.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
-							Material disc = player.getItemInHand().getType();
+							Material material = player.getItemInHand().getType();
+							String discName = disc.getDiscName(material);
 							player.playEffect(loc, effect, discID);
-							sender.sendMessage("Now playing " + disc);
+							sender.sendMessage("Now playing " + discName);
 							return true;
 						}
 						else {
@@ -99,8 +102,9 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 					if (args.length == 1) {
 						Player target = (Player) sender;
 						int discID = 0;
-						String PlaySong = args[0];
-						discID = disc.getDiscID(PlaySong);
+						discID = disc.getDiscID(args[0]);
+						Material material = Material.getMaterial(discID);
+						String discName = disc.getDiscName(material);
 						if (discID == 0) {
 							sender.sendMessage("Not a valid disc!");
 							return false;
@@ -109,7 +113,7 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 							Location loc = target.getLocation();
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, discID);
-							sender.sendMessage("Now playing " + args[0]);
+							sender.sendMessage("Now playing " + discName);
 							return true;
 						}
 					}
@@ -122,8 +126,9 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 						else {
 							if (target != player && player.hasPermission("lastcall.play.others") || target == player) {
 								int discID = 0;
-								String PlaySong = args[1];
-								discID = disc.getDiscID(PlaySong);
+								discID = disc.getDiscID(args[1]);
+								Material material = Material.getMaterial(discID);
+								String discName = disc.getDiscName(material);
 								if (discID == 0) {
 									sender.sendMessage("Not a valid disc!");
 									return false;
@@ -132,7 +137,7 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 									Location loc = target.getLocation();
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, discID);
-									sender.sendMessage("Now playing " + args[1] + " for " + args[0]);
+									sender.sendMessage("Now playing " + discName + " for " + args[0]);
 									return true;
 								}
 							}

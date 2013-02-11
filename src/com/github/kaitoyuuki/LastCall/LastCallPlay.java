@@ -19,8 +19,9 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 		this.plugin = plugin;
 	}
 	public void playDisc(final int discID, final String player) {
-		
+
 	}
+	LastDiscs disc = new LastDiscs();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -38,146 +39,15 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 					int discID = 0;
 					//String disc = args[0];
 					// cat 2257
-					if (args[0].equalsIgnoreCase("cat")) {
-						discID = 2257;
+					String PlaySong = args[0];
+					discID = disc.getDiscID(PlaySong);
+					if (discID != 0) { 
 						Effect effect = Effect.RECORD_PLAY;
 						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
 							Location loc = target.getLocation();
 							target.playEffect(loc, effect, discID);	
 						}
-						sender.sendMessage("Now playing cat for all users");
-
-						return true;
-					}
-					// 13 2256
-					if (args[0].equals("13")) {
-						discID = 2256;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing 13 for all users");
-
-						return true;
-					}
-					// blocks 2258
-					if (args[0].equalsIgnoreCase("blocks")) {
-						discID = 2258;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing blocks for all users");
-
-						return true;
-					}
-					// chirp 2259
-					if (args[0].equalsIgnoreCase("chirp")) {
-						discID = 2259;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing chirp for all users");
-
-						return true;
-					}
-					// far 2260
-					if (args[0].equalsIgnoreCase("far")) {
-						discID = 2260;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing far for all users");
-
-						return true;
-					}
-					// mall 2261
-					if (args[0].equalsIgnoreCase("mall")) {
-						discID = 2261;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing mall for all users");
-
-						return true;
-					}
-					// mellohi 2262
-					if (args[0].equalsIgnoreCase("mellohi")) {
-						discID = 2262;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing mellohi for all users");
-
-						return true;
-					}							
-					// stal 2263
-					if (args[0].equalsIgnoreCase("stal")) {
-						discID = 2263;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing stal for all users");
-
-						return true;
-					}
-					// strad 2264
-					if (args[0].equalsIgnoreCase("strad")) {
-						discID = 2264;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing strad for all users");
-
-						return true;
-					}
-					// ward 2265
-					if (args[0].equalsIgnoreCase("ward")) {
-						discID = 2265;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing ward for all users");
-
-						return true;
-					}
-					// 11 2266
-					if (args[0].equals("11")) {
-						discID = 2266;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing 11 for all users");
-
-						return true;
-					}
-					// wait 2267
-					if (args[0].equalsIgnoreCase("wait")) {
-						discID = 2267;
-						Effect effect = Effect.RECORD_PLAY;
-						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-							Location loc = target.getLocation();
-							target.playEffect(loc, effect, discID);	
-						}
-						sender.sendMessage("Now playing wait for all users");
+						sender.sendMessage("Now playing " + PlaySong + " for all users");
 
 						return true;
 					}
@@ -304,12 +174,12 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 					if (args.length == 0) {
 						int discID = player.getItemInHand().getType().getId();
 						if ((discID > 2255) && (discID < 2268)) {
-						Location loc = player.getLocation();
-						Effect effect = Effect.RECORD_PLAY;
-						Material disc = player.getItemInHand().getType();
-						player.playEffect(loc, effect, discID);
-						sender.sendMessage("Now playing " + disc);
-						return true;
+							Location loc = player.getLocation();
+							Effect effect = Effect.RECORD_PLAY;
+							Material disc = player.getItemInHand().getType();
+							player.playEffect(loc, effect, discID);
+							sender.sendMessage("Now playing " + disc);
+							return true;
 						}
 						else {
 							sender.sendMessage("That is not a music disc!");
@@ -536,6 +406,6 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 				}
 			}
 		}
-	return false;
+		return false;
 	}
 }

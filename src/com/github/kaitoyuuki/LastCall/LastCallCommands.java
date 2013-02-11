@@ -80,10 +80,66 @@ public class LastCallCommands implements CommandExecutor {
 						LastSong = args[0];
 					}
 					LastID = disc.getDiscID(LastSong);
+					if (LastID == 0) {
+						sender.sendMessage("Not a valid disc!");
+						return false;
+					}
+					else {
+						Effect effect = Effect.RECORD_PLAY;
+						for(Player target : Bukkit.getServer().getOnlinePlayers()) {
+							Location loc = target.getLocation();
+							target.playEffect(loc, effect, LastID);
+						}
+						Bukkit.getServer().broadcastMessage("§4Server is shutting down [§625s§4]");
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+							@Override
+							public void run() {
+								Bukkit.getServer().broadcastMessage("§4Server is shutting down [§610s§4]");	
+								Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+									@Override
+									public void run() {
+										int time = 5;
+										do {
+											Bukkit.getServer().broadcastMessage("§4Server is shutting down [§6" + time + "s§4]");	
+											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+												public void run() {
+												}
+											}, 20L);
+											time--;
+										} while (time > 0);
+										for (Player player : Bukkit.getOnlinePlayers()) {
+											player.kickPlayer("Server is shutting down");
+										}
+										Bukkit.shutdown();	
+									}
+								}, 100L);
+							}
+						}, 300L);
+						return true;
+					}
+				}
+				else {
+					player.sendMessage("You do not have permission to do that!");
+					return false;
+				}
+			}
+			else {
+				if (args.length > 1) {
+					return false;
+				}
+				if (args.length == 1) {
+					LastSong = args[0];
+				}
+				LastID = disc.getDiscID(LastSong);
+				if (LastID == 0) {
+					sender.sendMessage("Not a valid disc!");
+					return false;
+				}
+				else {
 					Effect effect = Effect.RECORD_PLAY;
 					for(Player target : Bukkit.getServer().getOnlinePlayers()) {
 						Location loc = target.getLocation();
-						target.playEffect(loc, effect, LastID);
+						target.playEffect(loc, effect, 2263);
 					}
 					Bukkit.getServer().broadcastMessage("§4Server is shutting down [§625s§4]");
 					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -112,53 +168,8 @@ public class LastCallCommands implements CommandExecutor {
 					}, 300L);
 					return true;
 				}
-				else {
-					player.sendMessage("You do not have permission to do that!");
-					return false;
-				}
-			}
-			else {
-				if (args.length > 1) {
-					return false;
-				}
-				if (args.length == 1) {
-					LastSong = args[0];
-				}
-				LastID = disc.getDiscID(LastSong);
-				Effect effect = Effect.RECORD_PLAY;
-				for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-					Location loc = target.getLocation();
-					target.playEffect(loc, effect, 2263);
-				}
-				Bukkit.getServer().broadcastMessage("§4Server is shutting down [§625s§4]");
-				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-					@Override
-					public void run() {
-						Bukkit.getServer().broadcastMessage("§4Server is shutting down [§610s§4]");	
-						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-							@Override
-							public void run() {
-								int time = 5;
-								do {
-									Bukkit.getServer().broadcastMessage("§4Server is shutting down [§6" + time + "s§4]");	
-									Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-										public void run() {
-										}
-									}, 20L);
-									time--;
-								} while (time > 0);
-								for (Player player : Bukkit.getOnlinePlayers()) {
-									player.kickPlayer("Server is shutting down");
-								}
-								Bukkit.shutdown();	
-							}
-						}, 100L);
-					}
-				}, 300L);
-				return true;
 			}
 		}
-
 		return false;
 	}
 }

@@ -48,6 +48,9 @@ public class LastDiscs {
 		if (LastSong.equalsIgnoreCase("wait")) {
 			discID =  2267;
 		}
+		else {
+			discID = 0;
+		}
 		return discID;
 	}
 }

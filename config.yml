@@ -1,5 +1,16 @@
-#
-# default music disc to be played when using /lastcall
-# acceptable values are the names of the discs
-lcDefault: stal
-counterMsg: §4Server is shutting down [§6  s§4]
+# Configuration file for LastCall v1.3
+# Options for the /lastcall command
+lastcall:
+    # Sets the default song to play when using /lastcall
+    # Default value is stal. accepts disc names or ID numbers
+    Song: stal
+    # Sets the default time to count down before stopping the
+    # server, in seconds. Default value is 25.
+    time: 30
+    # Format of the message to display when counting down the
+    # remaining time before the server stops
+    # use § for color codes (default MC color codes)
+    # use <time> to set where the remaining time will
+    # be inserted.
+    Message: §4Server is shutting down [§6<time>s§4]
+    

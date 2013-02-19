@@ -62,51 +62,57 @@ public class LastDiscs {
 	
 	int getDiscID(String LastSong) {
 		int discID = 0;
-		if (LastSong == "13"|LastSong == "2256") {
+		try {
+			discID = Integer.parseInt(LastSong);
+		} catch(NumberFormatException e) {
+			discID = 0;
+		}
+		
+		if (discID == 13||discID == 2256) {
 			discID =  2256;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("cat")||LastSong == "2257") {
+		else if (LastSong.equalsIgnoreCase("cat")||discID == 2257) {
 			discID =  2257;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("blocks")||LastSong == "2258") {
+		else if (LastSong.equalsIgnoreCase("blocks")||discID == 2258) {
 			discID =  2258;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("chirp")||LastSong == "2259") {
+		else if (LastSong.equalsIgnoreCase("chirp")||discID == 2259) {
 			discID =  2259;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("far")||LastSong == "2260") {
+		else if (LastSong.equalsIgnoreCase("far")||discID == 2260) {
 			discID =  2260;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("mall")||LastSong == "2261") {
+		else if (LastSong.equalsIgnoreCase("mall")||discID == 2261) {
 			discID =  2261;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("mellohi")||LastSong == "2262") {
+		else if (LastSong.equalsIgnoreCase("mellohi")||discID == 2262) {
 			discID =  2262;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("stal")||LastSong == "2263") {
+		else if (LastSong.equalsIgnoreCase("stal")||discID == 2263) {
 			discID =  2263;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("strad")||LastSong == "2264") {
+		else if (LastSong.equalsIgnoreCase("strad")||discID == 2264) {
 			discID =  2264;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("ward")||LastSong == "2265") {
+		else if (LastSong.equalsIgnoreCase("ward")||discID == 2265) {
 			discID =  2265;
 			return discID;
 		}
-		if (LastSong == "11"||LastSong == "2266") {
+		else if (discID == 11||discID == 2266) {
 			discID =  2266;
 			return discID;
 		}
-		if (LastSong.equalsIgnoreCase("wait")||LastSong == "2267") {
+		else if (LastSong.equalsIgnoreCase("wait")||discID == 2267) {
 			discID =  2267;
 			return discID;
 		}

@@ -14,12 +14,9 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 
 	@SuppressWarnings("unused")
 	private LCMain plugin;
-
+	PlayMetrics play = new PlayMetrics();
 	public LastCallPlay(LCMain plugin) {
 		this.plugin = plugin;
-	}
-	public void playDisc(final int discID, final String player) {
-
 	}
 	LastDiscs disc = new LastDiscs();
 
@@ -47,7 +44,7 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 							target.playEffect(loc, effect, discID);	
 						}
 						sender.sendMessage("Now playing " + discName + " for all users");
-
+						play.incPlays(discID);
 						return true;
 					}
 					else {
@@ -75,6 +72,7 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, discID);
 							sender.sendMessage("Now playing " + discName + " for " + args[0]);
+							play.incPlays(discID);
 							return true;
 						}
 					}
@@ -92,6 +90,7 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 							String discName = disc.getDiscName(material);
 							player.playEffect(loc, effect, discID);
 							sender.sendMessage("Now playing " + discName);
+							play.incPlays(discID);
 							return true;
 						}
 						else {
@@ -114,6 +113,7 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 							Effect effect = Effect.RECORD_PLAY;
 							target.playEffect(loc, effect, discID);
 							sender.sendMessage("Now playing " + discName);
+							play.incPlays(discID);
 							return true;
 						}
 					}
@@ -138,6 +138,7 @@ public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs imple
 									Effect effect = Effect.RECORD_PLAY;
 									target.playEffect(loc, effect, discID);
 									sender.sendMessage("Now playing " + discName + " for " + args[0]);
+									play.incPlays(discID);
 									return true;
 								}
 							}

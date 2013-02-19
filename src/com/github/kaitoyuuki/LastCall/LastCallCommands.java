@@ -36,11 +36,11 @@ public class LastCallCommands implements CommandExecutor {
 					try {
 						Thread.sleep(10000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 					count = count + 10;
-				} while (time - count >= 11);
+				} while (time - count > 19);
 				do {
 					final int timeleft = time - count;
 					plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
@@ -54,7 +54,7 @@ public class LastCallCommands implements CommandExecutor {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 					count++;
@@ -131,8 +131,13 @@ public class LastCallCommands implements CommandExecutor {
 				}
 				else if (args.length == 2) {
 					LastSong = args[1];
-					time = Integer.parseInt(args[0]);
-					LastID = disc.getDiscID(LastSong);
+					try {
+						time = Integer.parseInt(args[0]);
+						LastID = disc.getDiscID(LastSong);
+					} catch(NumberFormatException e) {
+						sender.sendMessage("Not a valid disc!");
+						return false;
+					}
 				}
 				else if (args.length == 1) {
 					LastID = disc.getDiscID(args[0]);
@@ -147,8 +152,13 @@ public class LastCallCommands implements CommandExecutor {
 					}
 				}
 				else if (args.length == 0) {
-					LastID = disc.getDiscID(LastSong);
-					time = Integer.parseInt(plugin.getConfig().getString("lastcall.time"));
+					try {
+						time = Integer.parseInt(args[0]);
+						LastID = disc.getDiscID(LastSong);
+					} catch(NumberFormatException e) {
+						sender.sendMessage("Not a valid disc!");
+						return false;
+					}
 				}
 				Effect effect = Effect.RECORD_PLAY;
 				for(Player target : Bukkit.getServer().getOnlinePlayers()) {
@@ -164,8 +174,13 @@ public class LastCallCommands implements CommandExecutor {
 				}
 				else if (args.length == 2) {
 					LastSong = args[1];
-					time = Integer.parseInt(args[0]);
-					LastID = disc.getDiscID(LastSong);
+					try {
+						time = Integer.parseInt(args[0]);
+						LastID = disc.getDiscID(LastSong);
+					} catch(NumberFormatException e) {
+						sender.sendMessage("Not a valid disc!");
+						return false;
+					}
 				}
 				else if (args.length == 1) {
 					LastID = disc.getDiscID(args[0]);

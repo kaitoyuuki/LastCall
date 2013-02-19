@@ -36,7 +36,7 @@ public class LastCallCommands implements CommandExecutor {
 					try {
 						Thread.sleep(10000);
 					} catch (InterruptedException e) {
-						
+
 						e.printStackTrace();
 					}
 					count = count + 10;
@@ -54,7 +54,7 @@ public class LastCallCommands implements CommandExecutor {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
-						
+
 						e.printStackTrace();
 					}
 					count++;
@@ -109,6 +109,7 @@ public class LastCallCommands implements CommandExecutor {
 				if (args.length == 1) {
 					if (args[0].equalsIgnoreCase("reload")) {
 						plugin.getConfig();
+						sender.sendMessage("LastCall has been reloaded");
 						return true;
 					}
 					else {
@@ -152,13 +153,7 @@ public class LastCallCommands implements CommandExecutor {
 					}
 				}
 				else if (args.length == 0) {
-					try {
-						time = Integer.parseInt(args[0]);
-						LastID = disc.getDiscID(LastSong);
-					} catch(NumberFormatException e) {
-						sender.sendMessage("Not a valid disc!");
-						return false;
-					}
+					LastID = disc.getDiscID(LastSong);
 				}
 				Effect effect = Effect.RECORD_PLAY;
 				for(Player target : Bukkit.getServer().getOnlinePlayers()) {

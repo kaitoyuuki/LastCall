@@ -5,7 +5,7 @@ lastcall:
     # Default value is stal. accepts disc names or ID numbers
     Song: stal
     # Sets the default time to count down before stopping the
-    # server, in seconds. Default value is 25.
+    # server, in seconds. Default value is 30.
     time: 30
     # Format of the message to display when counting down the
     # remaining time before the server stops

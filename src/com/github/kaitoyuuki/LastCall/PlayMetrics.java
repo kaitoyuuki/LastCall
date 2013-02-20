@@ -3,100 +3,53 @@ package com.github.kaitoyuuki.LastCall;
 import org.bukkit.Material;
 
 import com.github.kaitoyuuki.LastCall.Metrics;
+import com.github.kaitoyuuki.LastCall.LCMain;
+import com.turt2live.metrics.tracker.BasicTracker;
 
 @SuppressWarnings("unused")
 public class PlayMetrics {
-	
-	public int plays;
-	
-	public int thirteen;
-	public int cat;
-	public int blocks;
-	public int chirp;
-	public int far;
-	public int mall;
-	public int mellohi;
-	public int stal;
-	public int strad;
-	public int ward;
-	public int eleven;
-	public int wait;
-	
-	public int getPlays(int discID) {
-		if (discID == 2256) {
-			plays = cat;
-		}
-		if (discID == 2257) {
-			plays = thirteen;
-		}
-		if (discID == 2258) {
-			plays = blocks;
-		}
-		if (discID == 2259) {
-			plays = chirp;
-		}
-		if (discID == 2260) {
-			plays = far;
-		}
-		if (discID == 2261) {
-			plays = mall;
-		}
-		if (discID == 2262) {
-			plays = mellohi;
-		}
-		if (discID == 2263) {
-			plays = stal;
-		}
-		if (discID == 2264) {
-			plays = strad;
-		}
-		if (discID == 2265) {
-			plays = ward;
-		}
-		if (discID == 2266) {
-			plays = eleven;
-		}
-		if (discID == 2267) {
-			plays = wait;
-		}
-		return plays;
+	private LCMain plugin;
+
+	public PlayMetrics(LCMain plugin) {
+		this.plugin = plugin;
 	}
+	
 	public void incPlays(int discID) {
 		if (discID == 2256) {
-			++cat;
+			plugin.cat.increment();
 		}
 		if (discID == 2257) {
-			++thirteen;
+			plugin.thirteen.increment();
 		}
 		if (discID == 2258) {
-			++blocks;
+			plugin.blocks.increment();
 		}
 		if (discID == 2259) {
-			++chirp;
+			plugin.chirp.increment();
 		}
 		if (discID == 2260) {
-			++far;
+			plugin.far.increment();
 		}
 		if (discID == 2261) {
-			++mall;
+			plugin.mall.increment();
 		}
 		if (discID == 2262) {
-			++mellohi;
+			plugin.mellohi.increment();
 		}
 		if (discID == 2263) {
-			++stal;
+			plugin.stal.increment();
 		}
 		if (discID == 2264) {
-			++strad;
+			plugin.strad.increment();
 		}
 		if (discID == 2265) {
-			++ward;
+			plugin.ward.increment();
 		}
 		if (discID == 2266) {
-			++eleven;
+			plugin.eleven.increment();
 		}
 		if (discID == 2267) {
-			++wait;
+			plugin.wait.increment();
 		}
 	}
 }

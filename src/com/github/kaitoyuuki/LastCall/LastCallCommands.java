@@ -127,22 +127,15 @@ public class LastCallCommands implements CommandExecutor {
 			String format = plugin.getConfig().getString("lastcall.Message");
 			int LastID = 0;
 			if (sender instanceof Player) {
-				if (args.length > 2) {
-					return false;
-				}
-				else if (args.length == 2) {
-					LastSong = args[1];
-					try {
-						time = Integer.parseInt(args[0]);
-						LastID = disc.getDiscID(LastSong);
-					} catch(NumberFormatException e) {
-						sender.sendMessage("Not a valid disc!");
+				if (sender.hasPermission("lastcall.lastcall")) {
+					if (args.length > 2) {
 						return false;
 					}
-				}
-				else if (args.length == 1) {
-					LastID = disc.getDiscID(args[0]);
-					if (LastID == 0) {
+					if (args.length < 0) {
+						return false;
+					}
+					else if (args.length == 2) {
+						LastSong = args[1];
 						try {
 							time = Integer.parseInt(args[0]);
 							LastID = disc.getDiscID(LastSong);
@@ -151,17 +144,29 @@ public class LastCallCommands implements CommandExecutor {
 							return false;
 						}
 					}
+					else if (args.length == 1) {
+						LastID = disc.getDiscID(args[0]);
+						if (LastID == 0) {
+							try {
+								time = Integer.parseInt(args[0]);
+								LastID = disc.getDiscID(LastSong);
+							} catch(NumberFormatException e) {
+								sender.sendMessage("Not a valid disc!");
+								return false;
+							}
+						}
+					}
+					else if (args.length == 0) {
+						LastID = disc.getDiscID(LastSong);
+					}
+					Effect effect = Effect.RECORD_PLAY;
+					for(Player target : Bukkit.getServer().getOnlinePlayers()) {
+						Location loc = target.getLocation();
+						target.playEffect(loc, effect, LastID);
+					}
+					countDown(time, format);
+					return true;
 				}
-				else if (args.length == 0) {
-					LastID = disc.getDiscID(LastSong);
-				}
-				Effect effect = Effect.RECORD_PLAY;
-				for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-					Location loc = target.getLocation();
-					target.playEffect(loc, effect, LastID);
-				}
-				countDown(time, format);
-				return true;
 			}
 			else {
 				if (args.length > 2) {

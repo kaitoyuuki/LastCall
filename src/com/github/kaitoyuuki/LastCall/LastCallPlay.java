@@ -12,10 +12,13 @@ import org.bukkit.entity.Player;
 
 public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs implements CommandExecutor {
 
+	@SuppressWarnings("unused")
+
 	private LCMain plugin;
-	PlayMetrics play = new PlayMetrics(plugin);
+	PlayMetrics play;
 	public LastCallPlay(LCMain plugin) {
 		this.plugin = plugin;
+		play = new PlayMetrics(plugin);
 	}
 	LastDiscs disc = new LastDiscs();
 

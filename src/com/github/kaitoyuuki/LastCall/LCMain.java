@@ -50,7 +50,7 @@ public final class LCMain extends JavaPlugin {
 			metrics.addTracker(eleven);
 			metrics.addTracker(wait);
 			metrics.startMetrics();
-			stal.increment(10);
+			
 		}catch(IOException e){
 			// you broke something, didn't you?
 		}

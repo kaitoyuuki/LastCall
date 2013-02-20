@@ -1,12 +1,7 @@
 package com.github.kaitoyuuki.LastCall;
 
-import org.bukkit.Material;
 
-import com.github.kaitoyuuki.LastCall.Metrics;
-import com.github.kaitoyuuki.LastCall.LCMain;
-import com.turt2live.metrics.tracker.BasicTracker;
 
-@SuppressWarnings("unused")
 public class PlayMetrics {
 	private LCMain plugin;
 

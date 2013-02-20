@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.turt2live.metrics.EMetrics;
-import com.turt2live.metrics.tracker.BasicTracker;
+import com.turt2live.metrics.LastCall.EMetrics;
+import com.turt2live.metrics.LastCall.tracker.BasicTracker;
 
 
 public final class LCMain extends JavaPlugin {
@@ -50,7 +50,7 @@ public final class LCMain extends JavaPlugin {
 			metrics.addTracker(eleven);
 			metrics.addTracker(wait);
 			metrics.startMetrics();
-			
+			stal.increment(10);
 		}catch(IOException e){
 			// you broke something, didn't you?
 		}

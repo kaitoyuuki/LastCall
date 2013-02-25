@@ -1,21 +1,21 @@
 name: LastCall
 main: com.github.kaitoyuuki.LastCall.LCMain
-version: 1.6
+version: 1.8MD
 commands:
     lc:
         description: base command for lastcall.
-        permission: <plugin-name>.<command>
-        permission-message: you don't have <permission>
         usage: /<command> {reload}
         aliases: last
     play:
-        description: plays a music disc.
-        permission: <plugin-name>.<command>
-        permission-message: you don't have <permission>
+        description: plays a music disc
+    playall:
+        description: plays a music disc for everyone
     lastcall:
         description: plays the last call song and notifies users how long before shutdown.
         usage: /<command> [time] [disc]
-        permission: <plugin-name>.<command>
+    testcall:
+        description: simulates /lastcall for the user who used the command
+        usage: /<command> [time] [disc]
         
 Permissions:
     lastcall.*:
@@ -23,22 +23,31 @@ Permissions:
         children:
             lastcall.lc: true
             lastcall.lastcall: true
+            lastcall.testcall: true
             lastcall.play: true
             lastcall.play.others: true
+            lastcall.playall: true
     lastcall.play.*:
         description: Gives access to play music discs for anyone
         children:
             lastcall.play: true
             lastcall.play.others: true
+            lastcall.playall: true
     lastcall.lc:
         description: base command for LastCall.
         default: op
     lastcall.lastcall:
         description: allows you to start the shutdown timer
         default: op
+    lastcall.testcall:
+        description: allows you to see a demo of /lastcall
+        default: true
     lastcall.play:
         description: lets you play a music disc for yourself
         default: true
     lastcall.play.others:
         description: allows you to set the currently playing disc for others
+        default: op
+    lastcall.playall:
+        description: allows you to play a music disc for everyone
         default: op

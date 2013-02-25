@@ -10,20 +10,54 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public class LastCallPlay extends com.github.kaitoyuuki.LastCall.LastDiscs implements CommandExecutor {
+public class LastCallPlay implements CommandExecutor {
 
 	@SuppressWarnings("unused")
 
 	private LCMain plugin;
+	LastDiscs disc;
 	PlayMetrics play;
 	public LastCallPlay(LCMain plugin) {
 		this.plugin = plugin;
 		play = new PlayMetrics(plugin);
+		disc = new LastDiscs();
 	}
-	LastDiscs disc = new LastDiscs();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (cmd.getName().equalsIgnoreCase("playall")) {
+			if (sender instanceof Player) {
+				if (sender.hasPermission("lastcall.playall")) {
+					if (args.length != 1) {
+						sender.sendMessage("/playall <disc>");
+						return false;
+					}
+					else {
+						int discID = disc.getDiscID(args[0]);
+						Material material = Material.getMaterial(discID);
+						String discName = disc.getDiscName(material);
+						if (discID != 0) { 
+							Effect effect = Effect.RECORD_PLAY;
+							for(Player target : Bukkit.getServer().getOnlinePlayers()) {
+								Location loc = target.getLocation();
+								target.playEffect(loc, effect, discID);	
+							}
+							sender.sendMessage("Now playing " + discName + " for all users");
+							play.incPlays(discID);
+							return true;
+						}
+					}
+				}
+				else {
+					sender.sendMessage("You do not have permission!");
+					return false;
+				}
+			}
+			else {
+				sender.sendMessage("This command can only be used by players. please use /play <disc> to do it from console.");
+				return false;
+			}
+		}
 		if (cmd.getName().equalsIgnoreCase("play")) {
 			if (args.length > 2) {
 				sender.sendMessage("Too many arguments!");

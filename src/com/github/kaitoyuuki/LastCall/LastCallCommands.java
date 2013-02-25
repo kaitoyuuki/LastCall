@@ -13,11 +13,15 @@ import org.bukkit.entity.Player;
 public class LastCallCommands implements CommandExecutor {
 
 	private LCMain plugin;
-
+	
+	LastDiscs disc;
+	PlayMetrics play;
 	public LastCallCommands(LCMain plugin) {
 		this.plugin = plugin;
+		disc = new LastDiscs();
+		play = new PlayMetrics(plugin);
 	}
-	LastDiscs disc = new LastDiscs();
+	
 	public void countDown(final int time, final String format) {
 		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 			@Override
@@ -160,6 +164,7 @@ public class LastCallCommands implements CommandExecutor {
 						LastID = disc.getDiscID(LastSong);
 					}
 					Effect effect = Effect.RECORD_PLAY;
+					play.incPlays(LastID);
 					for(Player target : Bukkit.getServer().getOnlinePlayers()) {
 						Location loc = target.getLocation();
 						target.playEffect(loc, effect, LastID);
@@ -199,6 +204,7 @@ public class LastCallCommands implements CommandExecutor {
 					time = Integer.parseInt(plugin.getConfig().getString("lastcall.time"));
 				}
 				Effect effect = Effect.RECORD_PLAY;
+				play.incPlays(LastID);
 				for(Player target : Bukkit.getServer().getOnlinePlayers()) {
 					Location loc = target.getLocation();
 					target.playEffect(loc, effect, LastID);

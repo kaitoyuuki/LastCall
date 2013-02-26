@@ -14,28 +14,30 @@ import com.turt2live.metrics.LastCall.tracker.BasicTracker;
 
 @SuppressWarnings("unused")
 public final class LCMain extends JavaPlugin {
-	public BasicTracker cat, thirteen, blocks, chirp, far, mall, mellohi, stal, strad, ward, eleven, wait;
-	
-	
+	public BasicTracker cat, thirteen, blocks, chirp, far, mall, mellohi, stal, strad, ward, eleven, wait, listCount;
+
+
 	@Override
 	public void onEnable() {
 		this.saveDefaultConfig();
 		getConfig();
-		
+
 		File playlistsFolder = getPlaylistsFolder();
-		//List<Playlist> playlists = loadPlaylists(playlistsFolder);
-		
+		List<Playlist> playlists = loadPlaylists(playlistsFolder);
+
 		getCommand("play").setExecutor(new LastCallPlay(this));
 		getCommand("playall").setExecutor(new LastCallPlay(this));
 		getCommand("lastcall").setExecutor(new LastCallCommands(this));
 		getCommand("lc").setExecutor(new LastCallCommands(this));
 		getCommand("testcall").setExecutor(new MDCommands(this));
+		getCommand("playlist").setExecutor(new PlaylistCommands(this));
 		// Enabling MetricsExtension
 		// TODO add graph and trackers/plotters for number of playlists
 		try{
 			String graph = "Percentage of discs played";
+			String PLgraph = "Number of Playlists";
 			EMetrics metrics = new EMetrics(this);
-			
+
 			thirteen = EMetrics.createBasicTracker(graph, "13");
 			cat = EMetrics.createBasicTracker(graph, "cat");
 			blocks = EMetrics.createBasicTracker(graph, "blocks");
@@ -48,6 +50,8 @@ public final class LCMain extends JavaPlugin {
 			ward = EMetrics.createBasicTracker(graph, "ward");
 			eleven = EMetrics.createBasicTracker(graph, "eleven");
 			wait = EMetrics.createBasicTracker(graph, "wait");
+
+			listCount = EMetrics.createBasicTracker(PLgraph, "Playlists");
 			
 			metrics.addTracker(thirteen);
 			metrics.addTracker(cat);
@@ -61,8 +65,13 @@ public final class LCMain extends JavaPlugin {
 			metrics.addTracker(ward);
 			metrics.addTracker(eleven);
 			metrics.addTracker(wait);
-			metrics.startMetrics();
 			
+			metrics.addTracker(listCount);
+			
+			listCount.increment(playlists.size());
+			
+			metrics.startMetrics();
+
 		}catch(IOException e){
 			// you broke something, didn't you?
 		}
@@ -72,10 +81,14 @@ public final class LCMain extends JavaPlugin {
 	public void onDisable() {
 		// TODO Insert logic to be performed when the plugin is disabled
 	}
-	
+
 	public File getPlaylistsFolder() {
 		File pluginFolder = getDataFolder();
-		return new File(pluginFolder, "Playlists");
+		File playlistsFolder = new File(pluginFolder, "Playlists");
+		if(!(playlistsFolder.exists())) {
+			playlistsFolder.mkdir();
+		}
+		return playlistsFolder;
 	}
 	/**
 	 * load all playlists from the playlist folder into the given List object
@@ -84,8 +97,11 @@ public final class LCMain extends JavaPlugin {
 	 */
 	public List<Playlist> loadPlaylists(File playlistsFolder) {
 		//load playlists from playlists folder
-		
+
 		File[] files = playlistsFolder.listFiles();
+		if (files == null) {
+			return null;
+		}
 		List<Playlist> playlists = new ArrayList<Playlist>();
 		int i;
 		for (i=0; i < files.length; i++) {
@@ -111,12 +127,12 @@ public final class LCMain extends JavaPlugin {
 		
 		String aLine;
 		int numberOfLines= 0;
-		
+
 		while (( aLine = bf.readLine()) != null) {
 			numberOfLines++;
 		}
 		bf.close();
-		
+
 		return numberOfLines;
 	}
 	/**
@@ -126,29 +142,35 @@ public final class LCMain extends JavaPlugin {
 	 * @throws IOException file doesn't exist
 	 */
 	public Playlist makeList(File file) throws IOException {
+		
 		LastDiscs disc = new LastDiscs();
-		Playlist playlist = new Playlist(null, null, null);
+		
 		FileReader fr = new FileReader(file);
 		BufferedReader textReader = new BufferedReader(fr);
+		
 		int numberOfLines = readLines(file);
 		String[] text = new String[numberOfLines];
 		
-		int i;
+		String owner;
+		String name;
+		List<Song> songs = new ArrayList<Song>();
 		
+		int i;
+
 		for (i=0; i < numberOfLines; i++) {
 			text[i] = textReader.readLine();
 		}
 		textReader.close();
-		
-		playlist.setOwner(text[0]);
-		playlist.setName(file.getName());
+
+		owner = text[0];
+		name = file.getName();
 		for (i=1; i < numberOfLines; i++) {
 			Song song = disc.getSong(text[i]);
-			playlist.setSong(song);
-			
+			songs.add(song);
 		}
+		Playlist playlist = new Playlist(owner, name, songs);
 		return playlist;
-		
+
 	}
 
 }

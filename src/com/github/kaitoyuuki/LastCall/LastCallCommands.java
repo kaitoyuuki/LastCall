@@ -88,7 +88,9 @@ public class LastCallCommands implements CommandExecutor {
 					}
 					if (args.length == 1) {
 						if (args[0].equalsIgnoreCase("reload")) {
-							plugin.getConfig();
+							plugin.reloadConfig();
+							plugin.onDisable();
+							plugin.onEnable();
 							sender.sendMessage("LastCall has been reloaded");
 							return true;
 						}

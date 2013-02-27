@@ -1,9 +1,11 @@
 package com.github.kaitoyuuki.LastCall;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
@@ -15,7 +17,7 @@ public class Playlist implements Playlists {
 	
 	private LCMain plugin;
 	private String owner;
-	private final String name;
+	private String name;
     private List<Song> songs;
 	//TODO add and initialize Song variables for each song.
 	
@@ -37,9 +39,32 @@ public class Playlist implements Playlists {
 
 	
 	@Override
-	public void saveList() {
-		// TODO save playlist to file
-		
+	public boolean saveList() {
+		plugin = new LCMain();
+		String filename = new String(name + ".txt");
+		String text = new String();
+		String songString = new String();
+		File serverFolder = plugin.getDataFolder();
+		File pluginFolder = new File(serverFolder, "plugins");
+		File dataFolder = new File(pluginFolder, "LastCall");
+		File playlistFolder = new File(dataFolder, "Playlists");
+		File file = new File(playlistFolder, filename);
+		for(Song song : songs) {
+			songString = String.format("%s%n%s", songString, song.getName());
+		}
+		text = String.format("%s%n%s", owner, songString);
+		try {
+			file.createNewFile();
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter out = new BufferedWriter(fw);
+			out.write(text);
+			out.close();
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
@@ -81,7 +106,7 @@ public class Playlist implements Playlists {
 	}
 	@Override
 	public void setName(String name) {
-		// TODO decide whether or not I want to be able to change the name
+		this.name = name;
 		
 	}
 	

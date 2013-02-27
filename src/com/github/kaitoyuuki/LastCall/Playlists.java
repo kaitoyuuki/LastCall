@@ -16,7 +16,7 @@ public interface Playlists {
 	/**
 	 * Saves the playlist to a file. If the file does not exist, it will create it.
 	 */
-	public void saveList();
+	public boolean saveList();
 	/**
 	 * stores the name of the playlist in the provided String object
 	 * @return the String object provided

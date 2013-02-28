@@ -11,6 +11,11 @@ import java.io.Reader;
 import java.util.List;
 import java.util.Arrays;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
 
 @SuppressWarnings("unused")
 public class Playlist implements Playlists {
@@ -49,8 +54,16 @@ public class Playlist implements Playlists {
 		File dataFolder = new File(pluginFolder, "LastCall");
 		File playlistFolder = new File(dataFolder, "Playlists");
 		File file = new File(playlistFolder, filename);
-		for(Song song : songs) {
-			songString = String.format("%s%n%s", songString, song.getName());
+		if (songs.size() > 1) {
+			int i;
+			songString = songs.get(0).getName();
+			for(i=1; i < songs.size(); i++) {
+				Song song = songs.get(i);
+				songString = String.format("%s%n%s", songString, song.getName());
+			}
+		}
+		else if(songs.size() == 1){
+			songString = songs.get(0).getName();
 		}
 		text = String.format("%s%n%s", owner, songString);
 		try {
@@ -79,7 +92,12 @@ public class Playlist implements Playlists {
 
 	@Override
 	public Song getSong(int position) {
+		try {	
 		return songs.get(position);
+		} catch(IndexOutOfBoundsException e) {
+			return null;
+		}
+		
 	}
 
 	@Override
@@ -98,6 +116,16 @@ public class Playlist implements Playlists {
 		this.songs.add(song);
 		
 	}
+	
+	@Override
+	public boolean delSong(int position) {
+		try {
+			this.songs.remove(position);
+			return true;
+		} catch(IndexOutOfBoundsException e) {
+			return false;
+		}
+	}
 
 	@Override
 	public void setOwner(String owner) {
@@ -108,6 +136,133 @@ public class Playlist implements Playlists {
 	public void setName(String name) {
 		this.name = name;
 		
+	}
+
+	@Override
+	public boolean play(final Player player) {
+		if(songs.size() > 1) {
+			plugin = new LCMain();
+			final List<Song> listsongs = songs;
+			Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+				@Override
+				public void run() {
+					int count = 0;
+					do {
+						final int it = count;
+						Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
+							@Override
+							public void run() {
+								listsongs.get(it).play(player);
+							}
+						});
+						try {
+							Thread.sleep(1000 * listsongs.get(count).getLength());
+						} catch (InterruptedException e) {
+
+							e.printStackTrace();
+						}
+						count++;
+					} while (count < listsongs.size());
+				}
+			});
+		}
+		else if(songs.size() == 1) {
+			Song song = songs.get(0);
+			song.play(player);
+			return true;
+		}
+		else {
+			return false;
+		}
+		return false;
+	}
+
+
+
+	@Override
+	public boolean play(World world) {
+		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+			if(world == player.getWorld()) {
+				play(player);
+			}
+		}
+		return true;
+	}
+
+
+
+	@Override
+	public boolean play(String group) {
+		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+			if(player.hasPermission("lastcall.play." + group)) {
+				play(player);
+			}
+		}
+		return true;
+	}
+
+
+
+	@Override
+	public void play() {
+		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+			play(player);
+		}	
+	}
+
+
+
+	@Override
+	public boolean play(Integer index) {
+		try {
+			Song song = songs.get(index);
+			song.play();
+			return true;
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+	}
+
+
+
+	@Override
+	public boolean play(Player target, Integer index) {
+		if(!(target.isOnline())) {
+			return false;
+		}
+		try {
+		Song song = songs.get(index);
+		song.play(target);
+		return true;
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+	}
+
+
+
+	@Override
+	public boolean play(World world, Integer index) {
+		try {
+		Song song = songs.get(index);
+		song.play(world);
+		return true;
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+	}
+
+
+
+	@Override
+	public boolean play(String group, Integer index) {
+		try {
+		Song song = songs.get(index);
+		song.play(group);
+		return true;
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
 	}
 	
 

@@ -24,6 +24,7 @@ public class MDCommands implements CommandExecutor {
 
 		if (cmd.getName().equalsIgnoreCase("testcall")) {
 			String LastSong = plugin.getConfig().getString("lastcall.Song");
+			Song song = disc.getSong(LastSong);
 			int time = Integer.parseInt(plugin.getConfig().getString("lastcall.time"));
 			String format = plugin.getConfig().getString("lastcall.Message");
 			int LastID = 0;
@@ -40,18 +41,19 @@ public class MDCommands implements CommandExecutor {
 						LastSong = args[1];
 						try {
 							time = Integer.parseInt(args[0]);
-							LastID = disc.getDiscID(LastSong);
+							
+							song = disc.getSong(LastSong);
 						} catch(NumberFormatException e) {
 							sender.sendMessage("Not a valid disc!");
 							return false;
 						}
 					}
 					else if (args.length == 1) {
-						LastID = disc.getDiscID(args[0]);
-						if (LastID == 0) {
+						song = disc.getSong(args[0]);
+						if (song == null) {
 							try {
 								time = Integer.parseInt(args[0]);
-								LastID = disc.getDiscID(LastSong);
+								song = disc.getSong(LastSong);
 							} catch(NumberFormatException e) {
 								sender.sendMessage("Not a valid disc!");
 								return false;
@@ -59,18 +61,16 @@ public class MDCommands implements CommandExecutor {
 						}
 					}
 					else if (args.length == 0) {
-						LastID = disc.getDiscID(LastSong);
+						song = disc.getSong(LastSong);
 					}
-					Effect effect = Effect.RECORD_PLAY;
-					Location loc = player.getLocation();
-					player.playEffect(loc, effect, LastID);
+					song.play(plugin, player);
 					countDown(time, format, player);
 					play.incPlays(LastID);
 					return true;
 				}
 			}
 			else {
-
+				sender.sendMessage("§5This command can only be used by players.");
 				return true;
 			}
 			return false;
@@ -85,7 +85,7 @@ public class MDCommands implements CommandExecutor {
 				int count = 0;
 				do {		
 					final int timeleft = time - count;
-					plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+					Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
 						@Override
 						public void run() {
 							String sTime = Integer.toString(timeleft);
@@ -103,7 +103,7 @@ public class MDCommands implements CommandExecutor {
 				} while (time - count > 19);
 				do {
 					final int timeleft = time - count;
-					plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+					Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
 						@Override
 						public void run() {
 							String sTime = Integer.toString(timeleft);
@@ -119,7 +119,7 @@ public class MDCommands implements CommandExecutor {
 					}
 					count++;
 				} while (time - count >= 1);
-				plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+				Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
 					@Override
 					public void run() {
 						player.sendMessage("§6Countdown has ended. This has been a test");

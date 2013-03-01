@@ -19,7 +19,7 @@ public interface Playlists {
 	/**
 	 * Saves the playlist to a file. If the file does not exist, it will create it.
 	 */
-	public boolean saveList();
+	public boolean saveList(LCMain plugin);
 	/**
 	 * stores the name of the playlist in the provided String object
 	 * @return the String object provided
@@ -66,14 +66,15 @@ public interface Playlists {
 	 */
 	public void setOwner(String owner);
 	/**
-	 * changes the name of the playlist
-	 * @param name new name for the playlist
-	 */
-	public void setName(String name);
-	/**
 	 * plays all songs in the playlist for the target
-	 * @param target player to play the song for
+	 * @param target player to play the songs for
 	 * @return false if the player does not exist
+	 */
+	public boolean play(LCMain plugin, Player target);
+	/**
+	 * plays all songs in the playlist for the target. for when used by the target in question.
+	 * @param target player who will hear the songs
+	 * @return False if the player (somehow) does not exist.
 	 */
 	public boolean play(Player target);
 	/**
@@ -81,43 +82,43 @@ public interface Playlists {
 	 * @param world world object where the songs should be played
 	 * @return False if the world does not exist
 	 */
-	public boolean play(World world);
+	public boolean play(LCMain plugin, World world);
 	/**
 	 * plays all songs in the playlist for all players in the given group
 	 * @param group name of the group. players must have lastcall.play.{groupname} to hear the songs
 	 * @return false if the group does not exist
 	 */
-	public boolean play(String group);
+	public boolean play(LCMain plugin, String group);
 	/**
 	 * plays all songs for all players
 	 */
-	public void play();
+	public void play(LCMain plugin);
 	/**
 	 * plays the given song number from the playlist for all players
 	 * @param index song number. position of the song within <code>songs</code>
 	 * @return false if the number is outside the range of the list
 	 */
-	public boolean play(Integer index);
+	public boolean play(LCMain plugin, Integer index);
 	/**
 	 * plays the given song number from the playlist for the given player
 	 * @param target player who will hear the song
 	 * @param index song number
 	 * @return false if the player does not exist, or the number is outside the range of the list
 	 */
-	public boolean play(Player target, Integer index);
+	public boolean play(LCMain plugin, Player target, Integer index);
 	/**
 	 * plays the given song number from the playlist for all players in the given world
 	 * @param world world where the song should be played
 	 * @param index song number
 	 * @return false if the world does not exist, or the number is outside the range of the list
 	 */
-	public boolean play(World world, Integer index);
+	public boolean play(LCMain plugin, World world, Integer index);
 	/**
 	 * plays the given song number from the playlist for all players in the given group
 	 * @param group group that should hear the song. Includes players with lastcall.play.{groupname}
 	 * @param index song number
 	 * @return false if the group does not exist, or the number is outside the range of the list
 	 */
-	public boolean play(String group, Integer index);
+	public boolean play(LCMain plugin, String group, Integer index);
 	
 }

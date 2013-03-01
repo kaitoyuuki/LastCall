@@ -13,4 +13,11 @@ lastcall:
     # use <time> to set where the remaining time will
     # be inserted.
     Message: §4Server is shutting down [§6<time>s§4]
+
+# Options for the /play command
+play: 
+    # This is a list of players who won't hear songs when
+    # someone uses /play on them. When using /play on
+    # themselves, though, they'll still hear it.
+    exempt: []
     

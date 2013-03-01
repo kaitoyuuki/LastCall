@@ -15,24 +15,36 @@ import com.turt2live.metrics.LastCall.tracker.BasicTracker;
 @SuppressWarnings("unused")
 public final class LCMain extends JavaPlugin {
 	public BasicTracker cat, thirteen, blocks, chirp, far, mall, mellohi, stal, strad, ward, eleven, wait, listCount;
-
-
+	public List<Playlist> playlists = new ArrayList<Playlist>();
+	public File playlistsFolder;
+	
 	@Override
 	public void onEnable() {
 		this.saveDefaultConfig();
 		getConfig();
-
-		File playlistsFolder = getPlaylistsFolder();
-		List<Playlist> playlists = loadPlaylists(playlistsFolder);
-
+		
+		playlistsFolder = getPlaylistsFolder();
+		playlists = loadPlaylists(playlistsFolder);
+		/*
+		File allList = new File(getPlaylistsFolder(), "all.txt");
+		File musicList = new File(getPlaylistsFolder(), "music.txt");
+		File originalList = new File(getPlaylistsFolder(), "original.txt");
+		if (!allList.exists()) {
+			this.saveResource(allList.getPath(), false);
+		}
+		if (!musicList.exists()) {
+			this.saveResource(musicList.getPath(), false);
+		}
+		if (!originalList.exists()) {
+			this.saveResource(originalList.getPath(), false);
+		}
+		*/
 		getCommand("play").setExecutor(new LastCallPlay(this));
-		getCommand("playall").setExecutor(new LastCallPlay(this));
 		getCommand("lastcall").setExecutor(new LastCallCommands(this));
 		getCommand("lc").setExecutor(new LastCallCommands(this));
 		getCommand("testcall").setExecutor(new MDCommands(this));
 		getCommand("playlist").setExecutor(new PlaylistCommands(this));
 		// Enabling MetricsExtension
-		// TODO add graph and trackers/plotters for number of playlists
 		try{
 			String graph = "Percentage of discs played";
 			String PLgraph = "Number of Playlists";
@@ -81,7 +93,11 @@ public final class LCMain extends JavaPlugin {
 	public void onDisable() {
 		// TODO Insert logic to be performed when the plugin is disabled
 	}
-
+	
+	/**
+	 * 
+	 * @return File object for the playlists folder
+	 */
 	public File getPlaylistsFolder() {
 		File pluginFolder = getDataFolder();
 		File playlistsFolder = new File(pluginFolder, "Playlists");
@@ -89,6 +105,39 @@ public final class LCMain extends JavaPlugin {
 			playlistsFolder.mkdir();
 		}
 		return playlistsFolder;
+	}
+	/**
+	 * 
+	 * @return list of playlists
+	 */
+	public List<Playlist> getPlaylists() {
+		return playlists;
+	}
+	public Playlist getPlaylist(String name) {
+		if (playlists.size() == 0) {
+			return null;
+		}
+		List<String> list = new ArrayList<String>();
+		for(Playlist plist : playlists) {
+			list.add(plist.getName());
+		}
+		if (list.contains(name)) {
+			Playlist playlist = playlists.get(list.indexOf(name));
+			return playlist;
+		}
+		else {
+			return null;
+		}
+	}
+	/**
+	 * Adds the playlist to the list of available playlists
+	 * @param playlist 
+	 */
+	public void addPlaylist(Playlist playlist) {
+		playlists.add(playlist);
+	}
+	public void delPlaylist(Playlist playlist) {
+		playlists.remove(playlist);
 	}
 	/**
 	 * load all playlists from the playlist folder into the given List object
@@ -103,10 +152,10 @@ public final class LCMain extends JavaPlugin {
 			return null;
 		}
 		List<Playlist> playlists = new ArrayList<Playlist>();
-		int i;
-		for (i=0; i < files.length; i++) {
+		
+		for (File file : files) {
 			try {
-				playlists.add(i, makeList(files[i]));
+				playlists.add(makeList(file));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -142,35 +191,41 @@ public final class LCMain extends JavaPlugin {
 	 * @throws IOException file doesn't exist
 	 */
 	public Playlist makeList(File file) throws IOException {
-		
-		LastDiscs disc = new LastDiscs();
-		
-		FileReader fr = new FileReader(file);
-		BufferedReader textReader = new BufferedReader(fr);
-		
-		int numberOfLines = readLines(file);
-		String[] text = new String[numberOfLines];
-		
-		String owner;
-		String name;
-		List<Song> songs = new ArrayList<Song>();
-		
-		int i;
+		if (file.getName().endsWith(".txt")) {
+			LastDiscs disc = new LastDiscs();
+			String name = file.getName().substring(0, file.getName().lastIndexOf(".txt"));
+			if (disc.getSong(name) != null) {
+				return null;
+			}
+			FileReader fr = new FileReader(file);
+			BufferedReader textReader = new BufferedReader(fr);
 
-		for (i=0; i < numberOfLines; i++) {
-			text[i] = textReader.readLine();
+			int numberOfLines = readLines(file);
+			String[] text = new String[numberOfLines];
+
+			String owner;
+			List<Song> songs = new ArrayList<Song>();
+
+			int i;
+
+			for (i=0; i < numberOfLines; i++) {
+				text[i] = textReader.readLine();
+			}
+			textReader.close();
+
+			owner = text[0];
+			
+
+			for (i=1; i < numberOfLines; i++) {
+				Song song = disc.getSong(text[i]);
+				songs.add(song);
+			}
+			Playlist playlist = new Playlist(owner, name, songs);
+			return playlist;
 		}
-		textReader.close();
-
-		owner = text[0];
-		name = file.getName();
-		for (i=1; i < numberOfLines; i++) {
-			Song song = disc.getSong(text[i]);
-			songs.add(song);
+		else {
+			return null;
 		}
-		Playlist playlist = new Playlist(owner, name, songs);
-		return playlist;
-
 	}
 
 }

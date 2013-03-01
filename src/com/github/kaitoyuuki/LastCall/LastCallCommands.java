@@ -1,9 +1,9 @@
 package com.github.kaitoyuuki.LastCall;
 
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class LastCallCommands implements CommandExecutor {
 
 	private LCMain plugin;
-	
+
 	LastDiscs disc;
 	PlayMetrics play;
 	public LastCallCommands(LCMain plugin) {
@@ -21,15 +21,15 @@ public class LastCallCommands implements CommandExecutor {
 		disc = new LastDiscs();
 		play = new PlayMetrics(plugin);
 	}
-	
+
 	public void countDown(final int time, final String format) {
-		plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+		Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 			@Override
 			public void run() {
 				int count = 0;
 				do {		
 					final int timeleft = time - count;
-					plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+					Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
 						@Override
 						public void run() {
 							String sTime = Integer.toString(timeleft);
@@ -47,7 +47,7 @@ public class LastCallCommands implements CommandExecutor {
 				} while (time - count > 19);
 				do {
 					final int timeleft = time - count;
-					plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+					Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
 						@Override
 						public void run() {
 							String sTime = Integer.toString(timeleft);
@@ -63,7 +63,7 @@ public class LastCallCommands implements CommandExecutor {
 					}
 					count++;
 				} while (time - count >= 1);
-				plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+				Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
 					@Override
 					public void run() {
 						for (Player target : Bukkit.getOnlinePlayers()) {
@@ -81,21 +81,40 @@ public class LastCallCommands implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("lc")) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
-				if (player.hasPermission("lastcall.lc")) {
-					if (args.length > 1) {
-						sender.sendMessage("Too many arguments!");
-						return false;
-					}
-					if (args.length == 1) {
-						if (args[0].equalsIgnoreCase("reload")) {
+				if (args.length > 1) {
+					sender.sendMessage("§4Too many arguments!");
+					return false;
+				}
+				if (args.length == 1) {
+					if (args[0].equalsIgnoreCase("reload")) {
+						if (player.hasPermission("lastcall.reload")) {
 							plugin.reloadConfig();
 							plugin.onDisable();
 							plugin.onEnable();
-							sender.sendMessage("LastCall has been reloaded");
+							sender.sendMessage("§5LastCall has been reloaded");
 							return true;
 						}
 						else {
+							sender.sendMessage("§4You do not have permission!");
 							return false;
+						}
+					}
+					else if(args[0].equalsIgnoreCase("exempt")) {
+						String name = sender.getName();
+						List<String> names = plugin.getConfig().getStringList("play.exempt");
+						if (names.contains(name)) {
+							names.remove(name);
+							plugin.getConfig().set("play.exempt", names);
+							plugin.saveConfig();
+							sender.sendMessage("§dYou will now hear music played by others.");
+							return true;
+						}
+						else {
+							names.add(name);
+							plugin.getConfig().set("play.exempt", names);
+							plugin.saveConfig();
+							sender.sendMessage("§dYou will no longer hear music played by others.");
+							return true;
 						}
 					}
 					else {
@@ -103,19 +122,22 @@ public class LastCallCommands implements CommandExecutor {
 					}
 				}
 				else {
-					sender.sendMessage("You do not have permission!");
 					return false;
 				}
 			}
 			else {
 				if (args.length > 1) {
-					sender.sendMessage("Too many arguments!");
+					sender.sendMessage("§cToo many arguments!");
 					return false;
 				}
 				if (args.length == 1) {
 					if (args[0].equalsIgnoreCase("reload")) {
 						plugin.getConfig();
-						sender.sendMessage("LastCall has been reloaded");
+						sender.sendMessage("§5LastCall has been reloaded");
+						return true;
+					}
+					else if(args[0].equalsIgnoreCase("exempt")) {
+						sender.sendMessage("§dSilly console, you can't use this command!");
 						return true;
 					}
 					else {
@@ -129,88 +151,90 @@ public class LastCallCommands implements CommandExecutor {
 		}
 		if (cmd.getName().equalsIgnoreCase("lastcall")) {
 			String LastSong = plugin.getConfig().getString("lastcall.Song");
+			Song song = disc.getSong(LastSong);
 			int time = Integer.parseInt(plugin.getConfig().getString("lastcall.time"));
 			String format = plugin.getConfig().getString("lastcall.Message");
-			int LastID = 0;
 			if (sender instanceof Player) {
 				if (sender.hasPermission("lastcall.lastcall")) {
 					if (args.length > 2) {
+						sender.sendMessage("§cToo many arguments!");
 						return false;
 					}
 					if (args.length < 0) {
 						return false;
 					}
 					else if (args.length == 2) {
-						LastSong = args[1];
+						song = disc.getSong(args[1]);
+						if(song == null) {
+							sender.sendMessage("§c" + args[1] + " is not a valid song!");
+							return true;
+						}
 						try {
 							time = Integer.parseInt(args[0]);
-							LastID = disc.getDiscID(LastSong);
 						} catch(NumberFormatException e) {
-							sender.sendMessage("Not a valid disc!");
+							sender.sendMessage("§c" + args[0] + " is not a valid time!");
 							return false;
 						}
 					}
 					else if (args.length == 1) {
-						LastID = disc.getDiscID(args[0]);
-						if (LastID == 0) {
+						song = disc.getSong(args[0]);
+						if (song == null) {
 							try {
 								time = Integer.parseInt(args[0]);
-								LastID = disc.getDiscID(LastSong);
+								song = disc.getSong(LastSong);
 							} catch(NumberFormatException e) {
-								sender.sendMessage("Not a valid disc!");
+								sender.sendMessage("§c" + args[0] + " is not a valid song!");
 								return false;
 							}
 						}
 					}
 					else if (args.length == 0) {
-						LastID = disc.getDiscID(LastSong);
+						song = disc.getSong(LastSong);
 					}
-					Effect effect = Effect.RECORD_PLAY;
-					play.incPlays(LastID);
-					for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-						Location loc = target.getLocation();
-						target.playEffect(loc, effect, LastID);
-					}
+					play.incPlays(song.getID());
+					song.play();
 					countDown(time, format);
 					return true;
 				}
 			}
 			else {
 				if (args.length > 2) {
+					sender.sendMessage("§cToo many arguments!");
+					return false;
+				}
+				if (args.length < 0) {
 					return false;
 				}
 				else if (args.length == 2) {
-					LastSong = args[1];
+					song = disc.getSong(args[1]);
+					if(song == null) {
+						sender.sendMessage("§c" + args[1] + " is not a valid song!");
+						return true;
+					}
 					try {
 						time = Integer.parseInt(args[0]);
-						LastID = disc.getDiscID(LastSong);
 					} catch(NumberFormatException e) {
-						sender.sendMessage("Not a valid disc!");
+						sender.sendMessage("§c" + args[0] + " is not a valid time!");
 						return false;
 					}
 				}
 				else if (args.length == 1) {
-					LastID = disc.getDiscID(args[0]);
-					if (LastID == 0) {
+					song = disc.getSong(args[0]);
+					if (song == null) {
 						try {
 							time = Integer.parseInt(args[0]);
-							LastID = disc.getDiscID(LastSong);
+							song = disc.getSong(LastSong);
 						} catch(NumberFormatException e) {
-							sender.sendMessage("Not a valid disc!");
+							sender.sendMessage("§c" + args[0] + " is not a valid song!");
 							return false;
 						}
 					}
 				}
 				else if (args.length == 0) {
-					LastID = disc.getDiscID(LastSong);
-					time = Integer.parseInt(plugin.getConfig().getString("lastcall.time"));
+					song = disc.getSong(LastSong);
 				}
-				Effect effect = Effect.RECORD_PLAY;
-				play.incPlays(LastID);
-				for(Player target : Bukkit.getServer().getOnlinePlayers()) {
-					Location loc = target.getLocation();
-					target.playEffect(loc, effect, LastID);
-				}
+				play.incPlays(song.getID());
+				song.play();
 				countDown(time, format);
 				return true;
 			}

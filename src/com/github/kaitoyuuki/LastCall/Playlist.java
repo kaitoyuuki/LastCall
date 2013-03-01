@@ -44,14 +44,11 @@ public class Playlist implements Playlists {
 
 	
 	@Override
-	public boolean saveList() {
-		plugin = new LCMain();
+	public boolean saveList(LCMain plugin) {
 		String filename = new String(name + ".txt");
 		String text = new String();
 		String songString = new String();
-		File serverFolder = plugin.getDataFolder();
-		File pluginFolder = new File(serverFolder, "plugins");
-		File dataFolder = new File(pluginFolder, "LastCall");
+		File dataFolder = plugin.getDataFolder();
 		File playlistFolder = new File(dataFolder, "Playlists");
 		File file = new File(playlistFolder, filename);
 		if (songs.size() > 1) {
@@ -132,16 +129,48 @@ public class Playlist implements Playlists {
 		this.owner = owner;
 		
 	}
+
 	@Override
-	public void setName(String name) {
-		this.name = name;
-		
+	public boolean play(final LCMain plugin, final Player player) {
+		if(songs.size() > 1) {
+			final List<Song> listsongs = songs;
+			Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+				@Override
+				public void run() {
+					int count = 0;
+					do {
+						final int it = count;
+						Bukkit.getServer().getScheduler().runTask(plugin, new Runnable() {
+							@Override
+							public void run() {
+								listsongs.get(it).play(plugin, player);
+							}
+						});
+						try {
+							Thread.sleep(1000 * listsongs.get(count).getLength());
+						} catch (InterruptedException e) {
+
+							e.printStackTrace();
+						}
+						count++;
+					} while (count < listsongs.size());
+				}
+			});
+		}
+		else if(songs.size() == 1) {
+			Song song = songs.get(0);
+			song.play(plugin, player);
+			return true;
+		}
+		else {
+			return false;
+		}
+		return false;
 	}
 
 	@Override
 	public boolean play(final Player player) {
 		if(songs.size() > 1) {
-			plugin = new LCMain();
 			final List<Song> listsongs = songs;
 			Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 				@Override
@@ -177,13 +206,11 @@ public class Playlist implements Playlists {
 		return false;
 	}
 
-
-
 	@Override
-	public boolean play(World world) {
+	public boolean play(LCMain plugin, World world) {
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if(world == player.getWorld()) {
-				play(player);
+				play(plugin, player);
 			}
 		}
 		return true;
@@ -192,10 +219,10 @@ public class Playlist implements Playlists {
 
 
 	@Override
-	public boolean play(String group) {
+	public boolean play(LCMain plugin, String group) {
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if(player.hasPermission("lastcall.play." + group)) {
-				play(player);
+				play(plugin, player);
 			}
 		}
 		return true;
@@ -204,19 +231,19 @@ public class Playlist implements Playlists {
 
 
 	@Override
-	public void play() {
+	public void play(LCMain plugin) {
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-			play(player);
+			play(plugin, player);
 		}	
 	}
 
 
 
 	@Override
-	public boolean play(Integer index) {
+	public boolean play(LCMain plugin, Integer index) {
 		try {
 			Song song = songs.get(index);
-			song.play();
+			song.play(plugin);
 			return true;
 		} catch (IndexOutOfBoundsException e) {
 			return false;
@@ -226,13 +253,13 @@ public class Playlist implements Playlists {
 
 
 	@Override
-	public boolean play(Player target, Integer index) {
+	public boolean play(LCMain plugin, Player target, Integer index) {
 		if(!(target.isOnline())) {
 			return false;
 		}
 		try {
 		Song song = songs.get(index);
-		song.play(target);
+		song.play(plugin, target);
 		return true;
 		} catch (IndexOutOfBoundsException e) {
 			return false;
@@ -242,10 +269,10 @@ public class Playlist implements Playlists {
 
 
 	@Override
-	public boolean play(World world, Integer index) {
+	public boolean play(LCMain plugin, World world, Integer index) {
 		try {
 		Song song = songs.get(index);
-		song.play(world);
+		song.play(plugin, world);
 		return true;
 		} catch (IndexOutOfBoundsException e) {
 			return false;
@@ -255,15 +282,13 @@ public class Playlist implements Playlists {
 
 
 	@Override
-	public boolean play(String group, Integer index) {
+	public boolean play(LCMain plugin, String group, Integer index) {
 		try {
 		Song song = songs.get(index);
-		song.play(group);
+		song.play(plugin, group);
 		return true;
 		} catch (IndexOutOfBoundsException e) {
 			return false;
 		}
 	}
-	
-
 }

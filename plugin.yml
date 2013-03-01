@@ -8,31 +8,42 @@ commands:
         aliases: last
     play:
         description: plays a music disc
-    playall:
-        description: plays a music disc for everyone
     lastcall:
         description: plays the last call song and notifies users how long before shutdown.
         usage: /<command> [time] [disc]
     testcall:
         description: simulates /lastcall for the user who used the command
         usage: /<command> [time] [disc]
-        
+    playlist:
+        description: show playlists
+        usage: /<command>
 Permissions:
     lastcall.*:
         description: Gives access to all LastCall commands
         children:
-            lastcall.lc: true
+            lastcall.reload: true
             lastcall.lastcall: true
             lastcall.testcall: true
             lastcall.play: true
             lastcall.play.others: true
             lastcall.playall: true
+            lastcall.playlist: true
+            lastcall.playlist.op: true
     lastcall.play.*:
         description: Gives access to play music discs for anyone
         children:
             lastcall.play: true
             lastcall.play.others: true
             lastcall.playall: true
+    lastcall.playlist.op:
+        description: Gives access to editing all playlists
+        default: op
+        children:
+            lastcall.playlist: true
+            lastcall.playlist.create: true
+    lastcall.playlist.create:
+        description: allows you to create, delete, and modify playlists
+        default: op
     lastcall.lc:
         description: base command for LastCall.
         default: op

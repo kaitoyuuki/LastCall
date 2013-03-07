@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 
 @SuppressWarnings("unused")
@@ -153,7 +154,7 @@ public class Playlist implements Playlists {
 							e.printStackTrace();
 						}
 						count++;
-					} while (count < listsongs.size());
+					} while (count < listsongs.size() && Bukkit.getPlayer(player.getName()) != null);
 				}
 			});
 		}
@@ -171,6 +172,7 @@ public class Playlist implements Playlists {
 	@Override
 	public boolean play(final Player player) {
 		if(songs.size() > 1) {
+			final Plugin plugin = Bukkit.getPluginManager().getPlugin("LastCall");
 			final List<Song> listsongs = songs;
 			Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 				@Override
@@ -191,7 +193,7 @@ public class Playlist implements Playlists {
 							e.printStackTrace();
 						}
 						count++;
-					} while (count < listsongs.size());
+					} while (count < listsongs.size() && Bukkit.getPlayer(player.getName()) != null);
 				}
 			});
 		}

@@ -23,7 +23,6 @@ public class LastCallPlay implements CommandExecutor {
 		disc = new LastDiscs();
 		exempt = plugin.getConfig().getStringList("play.exempt");
 	}
-	//TODO change everything to use playlists and songs
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("play")) {
@@ -61,11 +60,11 @@ public class LastCallPlay implements CommandExecutor {
 				}
 				if (args.length == 2) {
 					if (args[0].equalsIgnoreCase("all")) {
-						Playlist playlist = plugin.getPlaylist(args[0]);
+						Playlist playlist = plugin.getPlaylist(args[1]);
 						if(playlist == null) {
-							Song song = disc.getSong(args[0]);
+							Song song = disc.getSong(args[1]);
 							if(song == null) {
-								sender.sendMessage("§c" + args[0] + " is not a valid playlist/song.");
+								sender.sendMessage("§c" + args[1] + " is not a valid playlist/song.");
 								return true;
 							}
 							else {
@@ -150,13 +149,18 @@ public class LastCallPlay implements CommandExecutor {
 								return false;
 							}
 							else {
-								
+								playlist.play(player);
+								for (Song psong : playlist.getSongs()) {
+									play.incPlays(psong.getID());
+								}
+								sender.sendMessage("§dNow playing " + playlist.getName() + "");
+								return true;
 							}
 						}
 						else {
 							String discName = song.getName();
 							song.play(plugin, target);
-							sender.sendMessage("Now playing " + discName);
+							sender.sendMessage("§dNow playing " + discName);
 							play.incPlays(song.getID());
 							return true;
 						}
@@ -164,111 +168,105 @@ public class LastCallPlay implements CommandExecutor {
 					if (args.length == 2) {
 						if (args[0].equalsIgnoreCase("all")) {
 							if (sender.hasPermission("lastcall.playall")) {
-								if (args.length != 1) {
-									sender.sendMessage("/playall <disc|playlist>");
+								Playlist playlist = plugin.getPlaylist(args[1]);
+								if(playlist == null) {
+									Song song = disc.getSong(args[1]);
+									if(song == null) {
+										sender.sendMessage("§c" + args[1] + " is not a valid playlist/song.");
+										return true;
+									}
+									else {
+										song.play(plugin);
+										sender.sendMessage("");
+										int ID = song.getID();
+										play.incPlays(ID);
+										sender.sendMessage("§5Now playing " + song.getName() + " for all players");
+										return true;
+									}
+								}
+								else {
+									playlist.play(plugin);
+									for (Song song : playlist.getSongs()) {
+										play.incPlays(song.getID());
+									}
+									sender.sendMessage("§5Now playing " + playlist.getName() + " for all players");
+									return true;
+								}
+							}
+						}
+						else {
+							sender.sendMessage("§4You do not have permission!");
+							return false;
+						}
+					}
+					Player target = (Bukkit.getServer().getPlayer(args[0]));
+					if (target == null) {
+						sender.sendMessage("§c" + args[0] + " is not online!");
+						return false;
+					}
+					else {
+						if (target == player) {
+							Song song = disc.getSong(args[1]);
+							if (song == null) {
+								Playlist playlist = plugin.getPlaylist(args[1]);
+								if (playlist == null) {
+									sender.sendMessage("§cNot a valid song/playlist!");
 									return false;
 								}
 								else {
-									Playlist playlist = plugin.getPlaylist(args[0]);
-									if(playlist == null) {
-										Song song = disc.getSong(args[0]);
-										if(song == null) {
-											sender.sendMessage("§c" + args[0] + " is not a valid playlist/song.");
-											return true;
-										}
-										else {
-											song.play(plugin);
-											sender.sendMessage("");
-											int ID = song.getID();
-											play.incPlays(ID);
-											sender.sendMessage("§5Now playing " + song.getName() + " for all players");
-											return true;
-										}
+									playlist.play(target);
+									sender.sendMessage("§dNow playing " + playlist.getName());
+									for (Song psong : playlist.getSongs()) {
+										play.incPlays(psong.getID());
 									}
-									else {
-										playlist.play(plugin);
-										for (Song song : playlist.getSongs()) {
-											play.incPlays(song.getID());
-										}
-										sender.sendMessage("§5Now playing " + playlist.getName() + " for all players");
-										return true;
-									}
-								}
-							}
-							else {
-								sender.sendMessage("§4You do not have permission!");
-								return false;
-							}
-						}
-						Player target = (Bukkit.getServer().getPlayer(args[0]));
-						if (target == null) {
-							sender.sendMessage("§c" + args[0] + " is not online!");
-							return false;
-						}
-						else {
-							if (target == player) {
-								Song song = disc.getSong(args[1]);
-								if (song == null) {
-									Playlist playlist = plugin.getPlaylist(args[1]);
-									if (playlist == null) {
-										sender.sendMessage("§cNot a valid song/playlist!");
-										return false;
-									}
-									else {
-										playlist.play(target);
-										sender.sendMessage("§dNow playing " + playlist.getName());
-										for (Song psong : playlist.getSongs()) {
-											play.incPlays(psong.getID());
-										}
-										return true;
-									}
-								}
-								else {
-									String discName = song.getName();
-									song.play(target);
-									sender.sendMessage("§dNow playing " + discName);
-									play.incPlays(song.getID());
-									return true;
-								}
-							}
-							else if (target != player && player.hasPermission("lastcall.play.others")) {
-								
-								Song song = disc.getSong(args[1]);
-								if (song == null) {
-									Playlist playlist = plugin.getPlaylist(args[1]);
-									if (playlist == null) {
-										sender.sendMessage("§cNot a valid song/playlist!");
-										return false;
-									}
-									else {
-										playlist.play(plugin, target);
-										sender.sendMessage("§dNow playing " + playlist.getName() + " for " + target.getName());
-										for (Song psong : playlist.getSongs()) {
-											play.incPlays(psong.getID());
-										}
-										return true;
-									}
-								}
-								else {
-									String discName = song.getName();
-									song.play(plugin, target);
-									sender.sendMessage("§dNow playing " + discName + " for " + args[0]);
-									play.incPlays(song.getID());
 									return true;
 								}
 							}
 							else {
-								sender.sendMessage("§4You do not have permission to use /play on other players");
+								String discName = song.getName();
+								song.play(target);
+								sender.sendMessage("§dNow playing " + discName);
+								play.incPlays(song.getID());
 								return true;
 							}
+						}
+						else if (target != player && player.hasPermission("lastcall.play.others")) {
+
+							Song song = disc.getSong(args[1]);
+							if (song == null) {
+								Playlist playlist = plugin.getPlaylist(args[1]);
+								if (playlist == null) {
+									sender.sendMessage("§cNot a valid song/playlist!");
+									return false;
+								}
+								else {
+									playlist.play(plugin, target);
+									sender.sendMessage("§dNow playing " + playlist.getName() + " for " + target.getName());
+									for (Song psong : playlist.getSongs()) {
+										play.incPlays(psong.getID());
+									}
+									return true;
+								}
+							}
+							else {
+								String discName = song.getName();
+								song.play(plugin, target);
+								sender.sendMessage("§dNow playing " + discName + " for " + args[0]);
+								play.incPlays(song.getID());
+								return true;
+							}
+						}
+						else {
+							sender.sendMessage("§4You do not have permission to use /play on other players");
+							return true;
 						}
 					}
 				}
 			}
-			else {
-				sender.sendMessage("How can you be a player but not a player?!");
-				return true;
-			}
+		}
+		else {
+			sender.sendMessage("How can you be a player but not a player?!");
+			return true;
 		}
 		return false;
 	}

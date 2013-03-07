@@ -6,39 +6,50 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.turt2live.metrics.LastCall.EMetrics;
 import com.turt2live.metrics.LastCall.tracker.BasicTracker;
+
+import com.palmergames.bukkit.towny.Towny;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 @SuppressWarnings("unused")
 public final class LCMain extends JavaPlugin {
 	public BasicTracker cat, thirteen, blocks, chirp, far, mall, mellohi, stal, strad, ward, eleven, wait, listCount;
 	public List<Playlist> playlists = new ArrayList<Playlist>();
 	public File playlistsFolder;
+	private Logger logger = Logger.getLogger("com.github.kaitoyuuki.LastCall.LCMain");
+	private PluginManager pm;
+	private Towny towny = null;
+	private WorldGuardPlugin wg = null;
+	
 	
 	@Override
 	public void onEnable() {
+		pm = getServer().getPluginManager();
 		this.saveDefaultConfig();
 		getConfig();
+		// Check if Towny and/or WorldGuard are installed
+		Plugin checkTowny;
+		Plugin checkWG;
+		checkTowny = pm.getPlugin("Towny");
+		checkWG = pm.getPlugin("WorldGuard");
+		if (checkWG != null && checkWG instanceof WorldGuardPlugin) {
+			System.out.println("WorldGuard is enabled!");
+			wg = (WorldGuardPlugin)checkWG;
+		}
+		if (checkTowny != null && checkTowny instanceof Towny) {
+			System.out.println("Towny is enabled!");
+			towny = (Towny)checkTowny;
+		}
 		
 		playlistsFolder = getPlaylistsFolder();
 		playlists = loadPlaylists(playlistsFolder);
-		/*
-		File allList = new File(getPlaylistsFolder(), "all.txt");
-		File musicList = new File(getPlaylistsFolder(), "music.txt");
-		File originalList = new File(getPlaylistsFolder(), "original.txt");
-		if (!allList.exists()) {
-			this.saveResource(allList.getPath(), false);
-		}
-		if (!musicList.exists()) {
-			this.saveResource(musicList.getPath(), false);
-		}
-		if (!originalList.exists()) {
-			this.saveResource(originalList.getPath(), false);
-		}
-		*/
 		getCommand("play").setExecutor(new LastCallPlay(this));
 		getCommand("lastcall").setExecutor(new LastCallCommands(this));
 		getCommand("lc").setExecutor(new LastCallCommands(this));

@@ -4,6 +4,7 @@ package com.github.kaitoyuuki.LastCall;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -154,6 +155,8 @@ public class LastCallCommands implements CommandExecutor {
 			Song song = disc.getSong(LastSong);
 			int time = Integer.parseInt(plugin.getConfig().getString("lastcall.time"));
 			String format = plugin.getConfig().getString("lastcall.Message");
+			char code = '&';
+			format = ChatColor.translateAlternateColorCodes(code, format);
 			if (sender instanceof Player) {
 				if (sender.hasPermission("lastcall.lastcall")) {
 					if (args.length > 2) {

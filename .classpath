@@ -16,5 +16,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/ian/Desktop/My Stuff/server/plugins/Towny.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ian/Desktop/My Stuff/server/plugins/WorldGuard.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

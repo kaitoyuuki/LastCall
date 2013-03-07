@@ -12,7 +12,7 @@ lastcall:
     # use § for color codes (default MC color codes)
     # use <time> to set where the remaining time will
     # be inserted.
-    Message: §4Server is shutting down [§6<time>s§4]
+    Message: "&4Server is shutting down [&6<time>s&4]"
 
 # Options for the /play command
 play: 

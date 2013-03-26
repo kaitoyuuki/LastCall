@@ -78,7 +78,7 @@ public class MDCommands implements CommandExecutor {
 			String LastSong = plugin.getConfig().getString("lastcall.Song");
 			Song song = disc.getSong(LastSong);
 			int time = Integer.parseInt(plugin.getConfig().getString("lastcall.time"));
-			String format = plugin.getConfig().getString("lastcall.Message");
+			String format = "&4Server is shutting down [&6<time>s&4]";
 			if (sender instanceof Player) {
 				if (sender.hasPermission("lastcall.testcall")) {
 					Player player = (Player) sender;

@@ -154,7 +154,7 @@ public class LastCallCommands implements CommandExecutor {
 			String LastSong = plugin.getConfig().getString("lastcall.Song");
 			Song song = disc.getSong(LastSong);
 			int time = Integer.parseInt(plugin.getConfig().getString("lastcall.time"));
-			String format = plugin.getConfig().getString("lastcall.Message");
+			String format = "&4Server is shutting down [&6<time>s&4]";
 			char code = '&';
 			format = ChatColor.translateAlternateColorCodes(code, format);
 			if (sender instanceof Player) {

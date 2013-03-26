@@ -1,6 +1,7 @@
 name: LastCall
 main: com.github.kaitoyuuki.LastCall.LCMain
-version: 1.8MD
+version: 1.8.5 semi-lite
+author: kaitoyuuki
 commands:
     lc:
         description: base command for lastcall.
